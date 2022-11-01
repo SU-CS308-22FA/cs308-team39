@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { projectFirestore } from "../firebase/config";
-class RegisterButton extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = { email: "", password: "", username: "" };
@@ -67,4 +67,4 @@ class RegisterButton extends Component {
     );
   }
 }
-export default RegisterButton;
+export default SignUp;

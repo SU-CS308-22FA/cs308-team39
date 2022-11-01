@@ -1,15 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
+import "./index.css";
 import App from "./App";
-import RegisterButton from "./component/RegisterButton";
-import NameForm from "./component/NameForm";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-
-root.render(
-  <div>
+ReactDOM.render(
+  <React.StrictMode>
     <App />
-    <RegisterButton />
-    <NameForm />
-  </div>
+  </React.StrictMode>,
+  document.getElementById("root")
 );

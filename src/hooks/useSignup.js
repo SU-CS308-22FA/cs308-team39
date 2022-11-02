@@ -4,7 +4,7 @@ import { projectFirestore } from "../firebase/config";
 export const useSignup = () => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
-  const [flag, setFlag] = useState(1);
+  const [flag, setFlag] = useState(0);
   const signup = async (email, password, displayName) => {
     setError(null);
     setIsPending(true);

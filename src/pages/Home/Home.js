@@ -13,10 +13,8 @@ export default function Home() {
   useEffect(() => {
     setIsPending(true);
 
-    projectFirestore
-      .collection("merchandises")
-      .get()
-      .then((snapshot) => {
+    const unsub = projectFirestore.collection("merchandises").onSnapshot(
+      (snapshot) => {
         if (snapshot.empty) {
           setError("No merchandise to load");
           setIsPending(false);
@@ -29,11 +27,14 @@ export default function Home() {
           setData(results);
           setIsPending(false);
         }
-      })
-      .catch((err) => {
+      },
+      (err) => {
         setError(err.message);
         setIsPending(false);
-      });
+      }
+    );
+
+    return () => unsub();
   }, []);
 
   return (

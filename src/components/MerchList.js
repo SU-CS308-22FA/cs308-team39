@@ -1,8 +1,15 @@
 import './MerchList.css'
 import React from "react";
 import { Link } from 'react-router-dom'
+import Delete from '../delete.svg'
+import { projectFirestore } from "../firebase/config"
 
 export default function MerchList({ merchs }) {
+
+    const handleClick =  (id) => {
+         projectFirestore.collection('merchandises').doc(id).delete()
+    }
+
     return (
         <div className="merch-list">
             {merchs.map(merch => (
@@ -12,6 +19,11 @@ export default function MerchList({ merchs }) {
                     <p>{merch.rating} out of 5</p>
                     <p>{merch.price} TL</p>
                     <Link to={`/merch/${merch.id}`}>More</Link>
+                    <img
+                        className='delete'
+                        src={Delete}
+                        onClick={() => handleClick(merch.id)}
+                    />
                 </div>        
             ))}
         </div>

@@ -1,6 +1,9 @@
 import './Create.css'
 import React from "react";
 import { useState } from 'react'
+import { useHistory } from 'react-router-dom';
+import { projectFirestore } from '../../firebase/config'
+
 
 
 export default function Create() {
@@ -8,10 +11,18 @@ export default function Create() {
     const [description, setDescription] = useState('')
     const [rating, setRating] = useState('')
     const [price, setPrice] = useState('')
+    const history = useHistory()
 
-    const handleSubmit = (e) => {
-        //e.preventDefault()
-        console.log(title, description, price, rating)
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const doc = {title, description, price, rating}
+
+        try {
+          await projectFirestore.collection('merchandises').add(doc)
+          history.push('/')
+        } catch(err) {
+          console.log(err)
+        }
       }
     
       return (

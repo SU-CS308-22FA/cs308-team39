@@ -1,12 +1,39 @@
 import React from "react";
 import './Merch.css'
 import { useParams } from 'react-router-dom'
-import { useFetch } from '../../hooks/useFetch'
+import { useEffect, useState } from "react";
+import { projectFirestore } from '../../firebase/config'
+
 
 export default function Merch() {
     const { id } = useParams()
-    const url = 'http://localhost:3000/merchs/' + id
-    const { error, isPending, data: merch } = useFetch(url)
+
+    const [merch, setMerch] = useState(null)
+    const [isPending, setIsPending] = useState(false)
+    const [error, setError] = useState(null)
+    
+    useEffect(() => {
+        setIsPending(true)
+
+        const unsub = projectFirestore.collection('merchandises').doc(id).onSnapshot((doc) => {
+            if (doc.exists) {
+                setIsPending(false)
+                setMerch(doc.data())
+            } else {
+                setIsPending(false)
+                setError('Could not find the merchandise')
+            }
+        })
+
+        return () => unsub
+
+    }, [id])
+
+    const handleClick = () => {
+        projectFirestore.collection('merchandises').doc(id).update({
+            title: 'Title updated'
+        })
+    }
 
     return (
         <div className="merch">
@@ -18,6 +45,7 @@ export default function Merch() {
                    <p>{merch.description}</p>
                     <p>{merch.rating} out of 5</p>
                     <p>{merch.price} TL</p>
+                    <button onClick={handleClick}>Update</button>
                 </>
             )}
         </div>

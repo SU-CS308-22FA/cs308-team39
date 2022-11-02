@@ -1,9 +1,10 @@
 import React from "react";
+import { useSignup } from "../../hooks/useSignup";
 
 import { useHistory } from "react-router-dom";
 
 import { useState } from "react";
-import { projectFirestore } from "../../firebase/config";
+
 // styles
 import styles from "./Signup.module.css";
 
@@ -11,21 +12,15 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [flag, setFlag] = useState(0);
+
+  const { signup, isPending, error, flag } = useSignup();
 
   const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email, password, displayName);
-
-    projectFirestore
-      .collection("users")
-      .add({ email: email, password: password, username: displayName })
-      .then(() => {
-        setFlag(1);
-        //history.push("/home");
-      });
+    signup(email, password, displayName);
   };
 
   return (
@@ -63,6 +58,7 @@ export default function Signup() {
 
       <button className="btn">Sign up</button>
       {flag === 1 && <p>User Added</p>}
+      {flag === 0 && <p>{error}</p>}
     </form>
   );
 }

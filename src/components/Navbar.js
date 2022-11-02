@@ -60,15 +60,20 @@ function NavigationBar() {
       </div>
 
       <Grid className="MenuBar" justifyContent="Center" container spacing={0}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Link to="/">
             <button className="Home_Button">Home</button>
           </Link>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
+          <Link to="/create">
+            <button className="Create_Button">Add Merch</button>
+          </Link>
+        </Grid>
+        <Grid item xs={2}>
           <button className="Teams_DropDown">Teams</button>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <button className="Category_DropDown">Categories</button>
         </Grid>
         <Grid item xs={3}>

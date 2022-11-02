@@ -1,0 +1,25 @@
+{
+    "merchs": [
+      {
+        "id": "1",
+        "title": "Veggie Stew",
+        "description": "AAAAAAAAAAAaaaaaaaa",
+        "price": "120",
+        "rating": "4.5"
+      },
+      {
+        "id": "2",
+        "title": "Veggie Pizza",
+        "description": "AAAAAAAAAAAaaaaaaaa",
+        "price": "300",
+        "rating": "3.9"
+      },
+      {
+        "id": "3",
+        "title": "Turkish National Team Jersey",
+        "description": "Official Turkish National Team Jersey",
+        "price": "500",
+        "rating": "4.7"
+      }
+    ]
+  }

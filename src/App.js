@@ -6,6 +6,8 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/Navbar";
+import Create from "./pages/create/Create";
+import Merch from "./pages/merch/Merch";
 
 function App() {
   return (
@@ -21,6 +23,12 @@ function App() {
           </Route>
           <Route path="/signup">
             <Signup />
+          </Route>
+          <Route path="/create">
+            <Create />
+          </Route>
+          <Route path="/merch/:id">
+            <Merch />
           </Route>
         </Switch>
       </BrowserRouter>

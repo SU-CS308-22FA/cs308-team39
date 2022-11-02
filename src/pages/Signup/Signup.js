@@ -1,4 +1,7 @@
 import React from "react";
+
+import { useHistory } from "react-router-dom";
+
 import { useState } from "react";
 import { projectFirestore } from "../../firebase/config";
 // styles
@@ -8,6 +11,9 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [flag, setFlag] = useState(0);
+
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,7 +23,8 @@ export default function Signup() {
       .collection("users")
       .add({ email: email, password: password, username: displayName })
       .then(() => {
-        console.log("User added!");
+        setFlag(1);
+        //history.push("/home");
       });
   };
 
@@ -55,6 +62,7 @@ export default function Signup() {
       </label>
 
       <button className="btn">Sign up</button>
+      {flag === 1 && <p>User Added</p>}
     </form>
   );
 }

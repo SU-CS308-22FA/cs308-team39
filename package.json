@@ -2,7 +2,7 @@
   "name": "cs308",
   "version": "0.1.0",
   "engines": {
-    "node": "16.18",
+    "node": "16.X",
     "npm": "8.19.2"
   },
   "private": true,

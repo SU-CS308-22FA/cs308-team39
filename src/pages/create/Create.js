@@ -57,7 +57,7 @@ export default function Create() {
         </label>
 
         <label>
-          <span>Quantitiy:</span>
+          <span>Quantity:</span>
           <input
             type="number"
             onChange={(e) => setRating(e.target.value)}

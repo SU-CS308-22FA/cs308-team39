@@ -15,7 +15,7 @@ export default function MerchList({ merchs }) {
         <div key={merch.id} className="card">
           <h3>{merch.title}</h3>
           <div>{merch.description.substring(0, 50)}...</div>
-          <p>Quantity {merch.rating}</p>
+          <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
           <Link to={`/merch/${merch.id}`}>More</Link>
           <img

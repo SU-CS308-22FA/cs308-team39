@@ -44,7 +44,7 @@ export default function Merch() {
         <>
           <h2 className="page-title">{merch.title}</h2>
           <p>{merch.description}</p>
-          <p>Quantity {merch.rating}</p>
+          <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
           <button onClick={handleClick}>Update</button>
         </>

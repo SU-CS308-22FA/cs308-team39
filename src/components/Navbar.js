@@ -1,25 +1,25 @@
 import React from "react";
 import "./NavBar.css";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+//import { styled } from "@mui/material/styles";
+//import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
+//import TextField from "@mui/material/TextField";
 import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
+//import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+//import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import DirectionsIcon from "@mui/icons-material/Directions";
+//import DirectionsIcon from "@mui/icons-material/Directions";
 import { Link } from "react-router-dom";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+//const Item = styled(Paper)(({ theme }) => ({
+//  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+//  ...theme.typography.body2,
+//  padding: theme.spacing(1),
+//  textAlign: "center",
+//  color: theme.palette.text.secondary,
+//}));
 
 function NavigationBar() {
   return (

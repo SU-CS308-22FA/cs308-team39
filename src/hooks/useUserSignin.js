@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { projectAuth } from "../firebase/config";
+
+import { useAuthContext } from "./useAuthContext";
+
 export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [flag, setFlag] = useState(0);
+
+  const { dispatch } = useAuthContext();
+
   const signin = async (email, password) => {
     setError(null);
     setIsPending(true);
@@ -12,13 +18,16 @@ export const useLogin = () => {
       // signin
       const res = await projectAuth.signInWithEmailAndPassword(email, password);
 
-      const idToken = projectAuth.currentUser.getIdToken.toString;
-      console.log(idToken);
+      //console.log(res.user);
 
       setFlag(1);
       if (!res) {
         throw new Error("Could not login");
       }
+
+      //dispatch login action
+      dispatch({ type: "LOGIN", payload: res.user });
+
       setIsPending(false);
       setError(null);
     } catch (err) {

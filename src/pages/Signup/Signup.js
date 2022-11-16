@@ -14,7 +14,6 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState("");
 
   const { signup, isPending, error, flag } = useSignup();
-
   //const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -57,7 +56,7 @@ export default function Signup() {
       </label>
 
       {!isPending && <button className="btn">Signup</button>}
-      {isPending == 1 && <button className="btn">Waiting</button>}
+      {isPending === 1 && <button className="btn">Waiting</button>}
       {flag === 1 && <p>User Added</p>}
       {flag === 0 && <p>{error}</p>}
     </form>

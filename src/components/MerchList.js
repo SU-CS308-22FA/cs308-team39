@@ -19,6 +19,7 @@ export default function MerchList({ merchs }) {
           <p>{merch.price} TL</p>
           <Link to={`/merch/${merch.id}`}>More</Link>
           <img
+            alt="x"
             className="delete"
             src={Delete}
             onClick={() => handleClick(merch.id)}

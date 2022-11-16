@@ -16,6 +16,7 @@ export const useLogin = () => {
 
     try {
       // signin
+      setFlag(0);
       const res = await projectAuth.signInWithEmailAndPassword(email, password);
 
       //console.log(res.user);

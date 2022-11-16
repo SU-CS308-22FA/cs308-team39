@@ -17,6 +17,7 @@ export const useSignup = () => {
 
     try {
       // signup
+      setFlag(0);
       const res = await projectAuth.createUserWithEmailAndPassword(
         email,
         password
@@ -26,7 +27,7 @@ export const useSignup = () => {
         password: password,
         username: displayName,
       });
-      await res.user.updateProfile({ username: displayName });
+      await res.user.updateProfile({ displayName: displayName });
       console.log(res.user);
 
       setFlag(1);

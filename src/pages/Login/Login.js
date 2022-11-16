@@ -40,7 +40,7 @@ export default function Login() {
         />
       </label>
       {!isPending && <button className="btn">Login</button>}
-      {isPending && <button className="btn">Waiting</button>}
+      {isPending === 1 && <button className="btn">Waiting</button>}
       {flag === 1 && <p>Login successfull</p>}
       {flag === 0 && <p>{error}</p>}
     </form>

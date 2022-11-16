@@ -22,10 +22,11 @@ import { Link } from "react-router-dom";
 //}));
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
-function NavigationBar() {
+
+export default function NavigationBar() {
   //different buttons if logged in
   const { logout } = useLogout(); //, isPending, error
-  const { state } = useAuthContext;
+  const { user } = useAuthContext();
   return (
     <div className="Nav">
       <div className="Heading">
@@ -54,25 +55,28 @@ function NavigationBar() {
           </IconButton>
         </Paper>
 
-        {state == null && (
-          <button>
-            <li>
-              <Link to="/login">Login</Link>
-              <br></br>
-            </li>
-          </button>
+        {!user && (
+          <>
+            <button>
+              <li>
+                <Link to="/login">Login</Link>
+                <br></br>
+              </li>
+            </button>
+            <button>
+              <li>
+                <Link to="/signup">Signup</Link>
+              </li>
+            </button>
+          </>
         )}
-        {state == null && (
-          <button>
-            <li>
-              <Link to="/signup">Signup</Link>
-            </li>
-          </button>
-        )}
-        {state != null && (
-          <button onClick={logout}>
-            <li>Logout</li>
-          </button>
+        {user && (
+          <>
+            <p className="Welcome">Welcome, {user.displayName}</p>
+            <button onClick={logout}>
+              <li>Logout</li>
+            </button>
+          </>
         )}
       </div>
 
@@ -100,5 +104,3 @@ function NavigationBar() {
     </div>
   );
 }
-
-export default NavigationBar;

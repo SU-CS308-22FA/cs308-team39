@@ -39,8 +39,8 @@ export default function Home() {
 
   return (
     <div className={styles["home"]}>
-      {error && <p classname="error">{error}</p>}
-      {isPending && <p classname="loading">{isPending}</p>}
+      {error && <p className="error">{error}</p>}
+      {isPending && <p className="loading">{isPending}</p>}
       {data && !error && <MerchList merchs={data} />}
     </div>
   );

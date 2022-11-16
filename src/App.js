@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/Navbar";
 import Create from "./pages/create/Create";
-import Merch from "./pages/merch/Merch";
+import Merch from "./pages/Merch/Merch";
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
-import { useSignup } from "../../hooks/useSignup";
+import { useSignup } from "../../hooks/useUserSignup";
 
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 
 import { useState } from "react";
 
@@ -15,7 +15,7 @@ export default function Signup() {
 
   const { signup, isPending, error, flag } = useSignup();
 
-  const history = useHistory();
+  //const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,7 +56,8 @@ export default function Signup() {
         />
       </label>
 
-      <button className="btn">Sign up</button>
+      {!isPending && <button className="btn">Signup</button>}
+      {isPending == 1 && <button className="btn">Waiting</button>}
       {flag === 1 && <p>User Added</p>}
       {flag === 0 && <p>{error}</p>}
     </form>

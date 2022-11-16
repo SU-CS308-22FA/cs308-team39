@@ -15,9 +15,12 @@ export const useSignup = () => {
         email,
         password
       );
-      projectFirestore
-        .collection("users")
-        .add({ email: email, password: password, username: displayName });
+      projectFirestore.collection("users").add({
+        email: email,
+        password: password,
+        username: displayName,
+      });
+      await res.user.updateProfile({ username: displayName });
       console.log(res.user);
       setFlag(1);
       if (!res) {

@@ -10,7 +10,8 @@
 }
 
 .SearchBar {
-  margin-left: 380px;
+  margin: 0 auto;
+  width: 90%;
 }
 .MenuBar {
   background-color: rgb(83, 76, 76);

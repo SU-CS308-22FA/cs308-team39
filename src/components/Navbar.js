@@ -20,8 +20,12 @@ import { Link } from "react-router-dom";
 //  textAlign: "center",
 //  color: theme.palette.text.secondary,
 //}));
-
+import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 function NavigationBar() {
+  //different buttons if logged in
+  const { logout } = useLogout(); //, isPending, error
+  const { state } = useAuthContext;
   return (
     <div className="Nav">
       <div className="Heading">
@@ -49,14 +53,27 @@ function NavigationBar() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <li>
-          <Link to="/login">Login</Link>
-          <br></br>
-        </li>
 
-        <li>
-          <Link to="/signup">Signup</Link>
-        </li>
+        {state == null && (
+          <button>
+            <li>
+              <Link to="/login">Login</Link>
+              <br></br>
+            </li>
+          </button>
+        )}
+        {state == null && (
+          <button>
+            <li>
+              <Link to="/signup">Signup</Link>
+            </li>
+          </button>
+        )}
+        {state != null && (
+          <button onClick={logout}>
+            <li>Logout</li>
+          </button>
+        )}
       </div>
 
       <Grid className="MenuBar" justifyContent="Center" container spacing={0}>

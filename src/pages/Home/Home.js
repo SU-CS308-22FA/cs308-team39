@@ -25,6 +25,7 @@ export default function Home() {
             results.push({ ...doc.data(), id: doc.id });
           });
           setData(results);
+          setError(null);
           setIsPending(false);
         }
       },

@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 import Delete from "../delete.svg";
 import { projectFirestore } from "../firebase/config";
 
+import { useAuthContext } from "../hooks/useAuthContext";
+
 export default function MerchList({ merchs }) {
+  const { user } = useAuthContext();
   const handleClick = (id) => {
     projectFirestore.collection("merchandises").doc(id).delete();
   };
@@ -18,12 +21,14 @@ export default function MerchList({ merchs }) {
           <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
           <Link to={`/merch/${merch.id}`}>More</Link>
-          <img
-            alt="x"
-            className="delete"
-            src={Delete}
-            onClick={() => handleClick(merch.id)}
-          />
+          {user && (
+            <img
+              alt="x"
+              className="delete"
+              src={Delete}
+              onClick={() => handleClick(merch.id)}
+            />
+          )}
         </div>
       ))}
     </div>

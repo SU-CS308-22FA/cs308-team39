@@ -8,7 +8,7 @@ import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/Navbar";
 import Create from "./pages/create/Create";
 import Merch from "./pages/Merch/Merch";
-
+import UserPage from "./pages/UserPage/UserPage";
 function App() {
   return (
     <div className="App">
@@ -29,6 +29,9 @@ function App() {
           </Route>
           <Route path="/merch/:id">
             <Merch />
+          </Route>
+          <Route path="/UserPage/:displayName">
+            <UserPage />
           </Route>
         </Switch>
       </BrowserRouter>

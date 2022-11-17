@@ -73,6 +73,7 @@ export default function NavigationBar() {
         {user && (
           <>
             <p className="Welcome">Welcome, {user.displayName}</p>
+            <Link to={`/UserPage/${user.displayName}`}>My Userpage</Link>
             <button onClick={logout}>
               <li>Logout</li>
             </button>

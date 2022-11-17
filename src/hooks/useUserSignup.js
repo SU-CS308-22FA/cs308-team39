@@ -36,7 +36,6 @@ export const useSignup = () => {
       }
       //dispatch login action
       dispatch({ type: "LOGIN", payload: res.user });
-
       setIsPending(false);
       setError(null);
     } catch (err) {

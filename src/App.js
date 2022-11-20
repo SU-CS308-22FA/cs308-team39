@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/NavigationBar";
 import Create from "./pages/create/Create";
 import Merch from "./pages/merch/Merch";
 

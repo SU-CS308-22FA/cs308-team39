@@ -1,4 +1,4 @@
-# https://cs308group39.herokuapp.com/
+# https://cs308group39.web.app/
 
 # Getting Started with Create React App
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "./NavigationBar.css";
+import "./NavBar.css";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -15,7 +15,10 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-function NavigationBar() {
+export default function NavBar() {
+  //different buttons if logged in
+  const { logout } = useLogout(); //, isPending, error
+  const { user } = useAuthContext();
   return (
     <div class="navbar">
       <div class="UpperBar">
@@ -45,14 +48,38 @@ function NavigationBar() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <li>
+        {/* <li> 
           <Link to="/login">Login</Link>
           <br></br>
         </li>
 
         <li>
           <Link to="/signup">Signup</Link>
-        </li>
+        </li>*/}
+        {!user && (
+          <>
+            <button>
+              <li>
+                <Link to="/login">Login</Link>
+                <br></br>
+              </li>
+            </button>
+            <button>
+              <li>
+                <Link to="/signup">Signup</Link>
+              </li>
+            </button>
+          </>
+        )}
+        {user && (
+          <>
+            <p className="Welcome">Welcome, {user.displayName}</p>
+            <Link to={`/UserPage/${user.displayName}`}>My Userpage</Link>
+            <button onClick={logout}>
+              <li>Logout</li>
+            </button>
+          </>
+        )}
       </div>
       <div class="LowerBar">
         <Link to="/">Home</Link>
@@ -103,5 +130,3 @@ function NavigationBar() {
     </div>
   );
 }
-
-export default NavigationBar;

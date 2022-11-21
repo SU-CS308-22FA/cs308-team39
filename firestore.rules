@@ -5,7 +5,7 @@ service cloud.firestore {
     	allow read: if true;
       allow write: if request.auth.uid != null;
     }
-    match /jackets/{documents=**} {
+    match /jackets/{document=**} {
     	allow read: if true;
       allow write: if request.auth.uid != null;
     }
@@ -13,14 +13,13 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth.uid != null;
     }
-    match /users/{uid=**} {
-      allow read: if request.auth.uid != null;
-      allow write: if request.auth.uid == uid;
-    }
-    match /users/request.auth.uid/type {
-      allow read: if request.auth.uid != null;
-      allow update: if false;
-    }
-  }
+    match /users/{uid}{
+    		allow read: if (request.auth.uid == uid) || (!request.resource
+        	.data.hasAny(['uid','password','email',]));
+        allow write: if (request.auth.uid == uid) &&
+        (!request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['type']));
+  	}   
+	}
 }
 //firebase deploy --only firestore (to set these rules.)

@@ -23,8 +23,8 @@ export default function NavBar() {
   const { logout } = useLogout(); //, isPending, error
   const { user } = useAuthContext();
   return (
-    <div class="navbar">
-      <div class="UpperBar">
+    <div className="navbar">
+      <div className="UpperBar">
         <img
           className="Logo"
           alt="Site Logo"
@@ -69,14 +69,14 @@ export default function NavBar() {
           </>
         )}
       </div>
-      <div class="LowerBar">
+      <div className="LowerBar">
         <Link to="/">Home</Link>
 
-        <div class="subnav">
-          <button class="subnavbtn">
-            Teams <i class="fa fa-caret-down"></i>
+        <div className="subnav">
+          <button className="subnavbtn">
+            Teams <i className="fa fa-caret-down"></i>
           </button>
-          <div class="subnav-content">
+          <div className="subnav-content">
             <Link to="/galatsaray">Galatsaray</Link>
             <Link to="/trabzonspor">Trabzonspor</Link>
             <Link to="/besiktas">Besiktas</Link>
@@ -85,11 +85,11 @@ export default function NavBar() {
             <Link to="/konyaspor">Konyaspor</Link>
           </div>
         </div>
-        <div class="subnav">
-          <button class="subnavbtn">
-            Clothing <i class="fa fa-caret-down"></i>
+        <div className="subnav">
+          <button className="subnavbtn">
+            Clothing <i className="fa fa-caret-down"></i>
           </button>
-          <div class="subnav-content">
+          <div className="subnav-content">
             <Link to="/jackets">Jackets</Link>
             <Link to="/shirts">Shirts</Link>
             <Link to="/shorts">Shorts</Link>
@@ -100,11 +100,11 @@ export default function NavBar() {
             <Link to="/glasses">Glasses</Link>
           </div>
         </div>
-        <div class="subnav">
-          <button class="subnavbtn">
-            Accessories <i class="fa fa-caret-down"></i>
+        <div className="subnav">
+          <button className="subnavbtn">
+            Accessories <i className="fa fa-caret-down"></i>
           </button>
-          <div class="subnav-content">
+          <div className="subnav-content">
             <Link to="/bag">Bags</Link>
             <Link to="/flag">Flags</Link>
             <Link to="/keychain">Keychains</Link>

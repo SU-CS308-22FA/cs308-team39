@@ -37,12 +37,6 @@ function App() {
             <Route path="/UserPage/:displayName">
               <UserPage />
             </Route>
-            <Route path="/shirts">
-              <Shirts />
-            </Route>
-            <Route path="/jackets">
-              <Jackets />
-            </Route>
           </Switch>
         </BrowserRouter>
       )}

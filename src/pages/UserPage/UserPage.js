@@ -7,7 +7,7 @@ export default function UserPage() {
   const { user } = useAuthContext();
   const [error, setError] = useState(null);
   const [type, setType] = useState(null);
-
+  const [password, setPassword] = useState(null);
   useEffect(() => {
     setError(null);
     try {
@@ -21,9 +21,11 @@ export default function UserPage() {
         } else {
           console.log("Document data:", doc.data());
         }
-        console.log("doc: ", doc);
+        //console.log("doc: ", doc);
         setType(doc.get("type"));
         console.log("type:", doc.get("type"));
+        setPassword(doc.get("password"));
+        console.log("password:", doc.get("password"));
       };
       fetchData();
       setError(null);
@@ -50,7 +52,7 @@ export default function UserPage() {
           <h1>My Profile:</h1>
           <h4>Name: {user.displayName}</h4>
           <h4>Email: {user.email}</h4>
-          <h4>Password: {user.password}</h4>
+          <h4>Password: {password}</h4>
           <h4>Account type: {type}</h4>
           <button onClick={handleClick}>Update account type</button>
           {error && <p>{error}</p>}

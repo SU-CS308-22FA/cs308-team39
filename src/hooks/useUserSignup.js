@@ -22,13 +22,17 @@ export const useSignup = () => {
         email,
         password
       );
-      projectFirestore.collection("users").add({
+
+      await res.user.updateProfile({ displayName: displayName });
+      console.log(res.user);
+
+      projectFirestore.collection("users").doc(res.user.uid).set({
         email: email,
         password: password,
         username: displayName,
+        type: "customer",
+        pic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
       });
-      await res.user.updateProfile({ displayName: displayName });
-      console.log(res.user);
 
       setFlag(1);
       if (!res) {

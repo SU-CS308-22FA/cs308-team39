@@ -75,13 +75,13 @@ function NavigationBar() {
             Clothing <i class="fa fa-caret-down"></i>
           </button>
           <div class="subnav-content">
-            <Link to="/jacket">Jackets</Link>
-            <Link to="/shirt">Shirts</Link>
-            <Link to="/short">Shorts</Link>
+            <Link to="/jackets">Jackets</Link>
+            <Link to="/shirts">Shirts</Link>
+            <Link to="/shorts">Shorts</Link>
             <Link to="/pants">Pants</Link>
             <Link to="/shoes">Shoes</Link>
             <Link to="/socks">Socks</Link>
-            <Link to="/hat">Hat</Link>
+            <Link to="/hats">Hat</Link>
             <Link to="/glasses">Glasses</Link>
           </div>
         </div>

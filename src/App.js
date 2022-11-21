@@ -8,6 +8,8 @@ import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/NavigationBar";
 import Create from "./pages/create/Create";
 import Merch from "./pages/merch/Merch";
+import Shirts from "./pages/Products/Shirts";
+import Jackets from "./pages/Products/Jackets";
 
 function App() {
   return (
@@ -29,6 +31,12 @@ function App() {
           </Route>
           <Route path="/merch/:id">
             <Merch />
+          </Route>
+          <Route path="/shirts">
+            <Shirts />
+          </Route>
+          <Route path="/jackets">
+            <Jackets />
           </Route>
         </Switch>
       </BrowserRouter>

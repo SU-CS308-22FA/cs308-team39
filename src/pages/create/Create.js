@@ -9,6 +9,8 @@ export default function Create() {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState("");
   const [price, setPrice] = useState("");
+  const [club, setClub] = useState("");
+  const [category, setCategory] = useState("");
   const history = useHistory();
 
   const handleSubmit = async (e) => {
@@ -17,6 +19,20 @@ export default function Create() {
 
     try {
       await projectFirestore.collection("merchandises").add(doc);
+      history.push("/");
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      await projectFirestore.collection(club.toLowerCase()).add(doc);
+      history.push("/");
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      await projectFirestore.collection(category.toLowerCase()).add(doc);
       history.push("/");
     } catch (err) {
       console.log(err);
@@ -33,6 +49,26 @@ export default function Create() {
             type="text"
             onChange={(e) => setTitle(e.target.value)}
             value={title}
+            required
+          />
+        </label>
+
+        <label>
+          <span>Club Name:</span>
+          <input
+            type="text"
+            onChange={(e) => setClub(e.target.value)}
+            value={club}
+            required
+          />
+        </label>
+
+        <label>
+          <span>Product Type:</span>
+          <input
+            type="text"
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
             required
           />
         </label>

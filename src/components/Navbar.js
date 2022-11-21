@@ -1,27 +1,35 @@
 import React from "react";
 import "./NavBar.css";
-import { styled } from "@mui/material/styles";
+//import { styled } from "@mui/material/styles";
+//import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+//import TextField from "@mui/material/TextField";
 import InputBase from "@mui/material/InputBase";
+//import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
+//import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+//import DirectionsIcon from "@mui/icons-material/Directions";
 import { Link } from "react-router-dom";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+//const Item = styled(Paper)(({ theme }) => ({
+//  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+//  ...theme.typography.body2,
+//  padding: theme.spacing(1),
+//  textAlign: "center",
+//  color: theme.palette.text.secondary,
+//}));
+import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 
-export default function NavBar() {
+export default function NavigationBar() {
   //different buttons if logged in
   const { logout } = useLogout(); //, isPending, error
   const { user } = useAuthContext();
   return (
-    <div class="navbar">
-      <div class="UpperBar">
+    <div className="Nav">
+      <div className="Heading">
         <img
           className="Logo"
           alt="Site Logo"
@@ -34,9 +42,7 @@ export default function NavBar() {
             p: "2px 4px",
             display: "flex",
             alignItems: "center",
-            marginTop: 1,
             width: 400,
-            height: 50,
           }}
         >
           <InputBase
@@ -48,14 +54,7 @@ export default function NavBar() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        {/* <li> 
-          <Link to="/login">Login</Link>
-          <br></br>
-        </li>
 
-        <li>
-          <Link to="/signup">Signup</Link>
-        </li>*/}
         {!user && (
           <>
             <button>
@@ -81,52 +80,28 @@ export default function NavBar() {
           </>
         )}
       </div>
-      <div class="LowerBar">
-        <Link to="/">Home</Link>
 
-        <div class="subnav">
-          <button class="subnavbtn">
-            Teams <i class="fa fa-caret-down"></i>
-          </button>
-          <div class="subnav-content">
-            <Link to="/galatsaray">Galatsaray</Link>
-            <Link to="/trabzonspor">Trabzonspor</Link>
-            <Link to="/besiktas">Besiktas</Link>
-            <Link to="/fenerbahce">Fenerbahce</Link>
-            <Link to="/umraniyespor">Umraniyespor</Link>
-            <Link to="/konyaspor">Konyaspor</Link>
-          </div>
-        </div>
-        <div class="subnav">
-          <button class="subnavbtn">
-            Clothing <i class="fa fa-caret-down"></i>
-          </button>
-          <div class="subnav-content">
-            <Link to="/jackets">Jackets</Link>
-            <Link to="/shirts">Shirts</Link>
-            <Link to="/shorts">Shorts</Link>
-            <Link to="/pants">Pants</Link>
-            <Link to="/shoes">Shoes</Link>
-            <Link to="/socks">Socks</Link>
-            <Link to="/hats">Hat</Link>
-            <Link to="/glasses">Glasses</Link>
-          </div>
-        </div>
-        <div class="subnav">
-          <button class="subnavbtn">
-            Accessories <i class="fa fa-caret-down"></i>
-          </button>
-          <div class="subnav-content">
-            <Link to="/bag">Bags</Link>
-            <Link to="/flag">Flags</Link>
-            <Link to="/keychain">Keychains</Link>
-            <Link to="/football">Footballs</Link>
-          </div>
-        </div>
-        <Link to="/create">Add Product</Link>
-        <Link to="/about">About</Link>
-        <Link to="/contact">Contact Us</Link>
-      </div>
+      <Grid className="MenuBar" justifyContent="Center" container spacing={0}>
+        <Grid item xs={2}>
+          <Link to="/">
+            <button className="Home_Button">Home</button>
+          </Link>
+        </Grid>
+        <Grid item xs={2}>
+          <Link to="/create">
+            <button className="Create_Button">Add Merch</button>
+          </Link>
+        </Grid>
+        <Grid item xs={2}>
+          <button className="Teams_DropDown">Teams</button>
+        </Grid>
+        <Grid item xs={2}>
+          <button className="Category_DropDown">Categories</button>
+        </Grid>
+        <Grid item xs={3}>
+          <button className="Contact_Button">Contact Us</button>
+        </Grid>
+      </Grid>
     </div>
   );
 }

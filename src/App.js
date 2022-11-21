@@ -9,32 +9,36 @@ import Navbar from "./components/Navbar";
 import Create from "./pages/create/Create";
 import Merch from "./pages/Merch/Merch";
 import UserPage from "./pages/UserPage/UserPage";
+import { useAuthContext } from "./hooks/useAuthContext";
 function App() {
+  const { authIsReady } = useAuthContext();
   return (
     <div className="App">
-      <BrowserRouter>
-        <Navbar />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Route path="/create">
-            <Create />
-          </Route>
-          <Route path="/merch/:id">
-            <Merch />
-          </Route>
-          <Route path="/UserPage/:displayName">
-            <UserPage />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      {authIsReady && (
+        <BrowserRouter>
+          <Navbar />
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+            <Route path="/create">
+              <Create />
+            </Route>
+            <Route path="/merch/:id">
+              <Merch />
+            </Route>
+            <Route path="/UserPage/:displayName">
+              <UserPage />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      )}
     </div>
   );
 }

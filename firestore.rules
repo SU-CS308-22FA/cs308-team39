@@ -1,11 +1,6 @@
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /merchandises/{document=**} {
-      allow read: if true;
-      allow write: if request.auth.uid != null;
-    }
     match /shirts/{document=**} {
     	allow read: if true;
       allow write: if request.auth.uid != null;
@@ -14,9 +9,13 @@ service cloud.firestore {
     	allow read: if true;
       allow write: if request.auth.uid != null;
     }
-    match /users/{document=**} {
+    match /merchandises/{document=**} {
+      allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+    match /users/{uid} {
       allow read: if request.auth.uid != null;
-      allow write: if request.auth.uid == document;
+      allow write: if request.auth.uid == uid;
     }
     match /users/request.auth.uid/type {
       allow read: if request.auth.uid != null;
@@ -24,5 +23,4 @@ service cloud.firestore {
     }
   }
 }
-//firebase deploy --only firestore (to set these rules.)
 //firebase deploy --only firestore (to set these rules.)

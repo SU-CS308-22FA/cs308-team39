@@ -51,14 +51,6 @@ export default function NavBar() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        {/* <li> 
-          <Link to="/login">Login</Link>
-          <br></br>
-        </li>
-
-        <li>
-          <Link to="/signup">Signup</Link>
-        </li>*/}
         {!user && (
           <>
             <div>

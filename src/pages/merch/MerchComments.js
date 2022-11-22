@@ -50,6 +50,21 @@ export default function MerchComments({ merchandise }) {
         </label>
         <button className="btn">Add Comment</button>
       </form>
+      <ul>
+        {merchandise.data().comments.length > 0 && merchandise.data().comments.map(comment => (
+          <li key={comment.id}>
+            <div className="comment-author">
+              <p>{comment.displayName}</p>
+            </div>
+            <div className="comment-date">
+              <p>{/*comment.createdAt.toDate()*/}</p>
+            </div>
+            <div className="comment-content">
+              <p>{comment.content}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

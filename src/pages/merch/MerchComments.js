@@ -8,17 +8,17 @@ export default function MerchComments({ merchandise }) {
   const { user } = useAuthContext()
   const { updateDocument, response } = useFirestore('merchandises')
   const [newComment, setNewComment] = useState('')
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+  
     const commentToAdd = {
       displayName: user.displayName,
       content: newComment,
       createdAt: timestamp.fromDate(new Date()),
       id: Math.random()
     }
-
+    
     await updateDocument(merchandise.id, {
         comments: [...merchandise.data().comments, commentToAdd],
       })
@@ -57,7 +57,7 @@ export default function MerchComments({ merchandise }) {
               <p>{comment.displayName}</p>
             </div>
             <div className="comment-date">
-              <p>{/*comment.createdAt.toDate()*/}</p>
+              <p>date will appear in here</p>
             </div>
             <div className="comment-content">
               <p>{comment.content}</p>

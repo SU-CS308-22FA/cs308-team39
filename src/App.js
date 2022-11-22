@@ -12,6 +12,7 @@ import Shirts from "./pages/Products/Shirts";
 import Jackets from "./pages/Products/Jackets";
 import UserPage from "./pages/UserPage/UserPage";
 import { useAuthContext } from "./hooks/useAuthContext";
+import Search from "./pages/Search/Search";
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -44,6 +45,9 @@ function App() {
             </Route>
             <Route path="/jackets">
               <Jackets />
+            </Route>
+            <Route path="/search">
+              <Search />
             </Route>
           </Switch>
         </BrowserRouter>

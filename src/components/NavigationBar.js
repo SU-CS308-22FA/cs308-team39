@@ -9,14 +9,16 @@ import { Link } from "react-router-dom";
 
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
+import Searchbar from "./Searchbar";
 
+{/*
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
-}));
+})); */}
 
 export default function NavBar() {
   //different buttons if logged in
@@ -30,6 +32,14 @@ export default function NavBar() {
           alt="Site Logo"
           src={process.env.PUBLIC_URL + "/logo-social.png"}
         />
+        <Searchbar className="SearchBar" component="form" sx={{
+            p: "2px 4px",
+            display: "flex",
+            alignItems: "center",
+            marginTop: 1,
+            
+          }}/>
+        {/* 
         <Paper
           className="SearchBar"
           component="form"
@@ -51,6 +61,7 @@ export default function NavBar() {
             <SearchIcon />
           </IconButton>
         </Paper>
+        */}
         {!user && (
           <>
             <div>

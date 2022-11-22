@@ -3,8 +3,11 @@ import "./Merch.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase/config";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import MerchComments from "./MerchComments";
 
 export default function Merch() {
+  const { user } = useAuthContext();
   const { id } = useParams();
 
   const [merch, setMerch] = useState(null);
@@ -47,6 +50,8 @@ export default function Merch() {
           <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
           <button onClick={handleClick}>Update</button>
+          {user && <MerchComments/>}
+          
         </>
       )}
     </div>

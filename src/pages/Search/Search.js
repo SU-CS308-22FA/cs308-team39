@@ -32,7 +32,7 @@ export default function Search() {
         } else {
           let results = [];
           snapshot.docs.forEach((doc) => {
-            if(doc.data().title.toLowerCase().includes(query.toLowerCase()))
+            if(doc.data().title.toLowerCase().trim().includes(query.toLowerCase().trim()))
             results.push({ ...doc.data(), id: doc.id });
           });
           setData(results);

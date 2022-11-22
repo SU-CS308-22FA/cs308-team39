@@ -13,7 +13,7 @@ export default function Create() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const doc = { title, description, price, rating };
+    const doc = { title, description, price, rating, comments: []};
 
     try {
       await projectFirestore.collection("merchandises").add(doc);

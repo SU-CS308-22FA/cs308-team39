@@ -13,15 +13,16 @@ export default function Search() {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState("Besiktas");
-  const queryString = useLocation()
   
-  const queryParams = new URLSearchParams(queryString)
+  let queryString = useLocation().search
+  
   
 
   useEffect(() => {
     setIsPending(true);
-    setQuery(queryParams.get('q'))
+    
+    let queryParams = new URLSearchParams(queryString)
+    let query = queryParams.get('q')
     console.log("query is " + query)
     const unsub = projectFirestore.collection("merchandises").onSnapshot(
       (snapshot) => {
@@ -31,8 +32,7 @@ export default function Search() {
         } else {
           let results = [];
           snapshot.docs.forEach((doc) => {
-            console.log(doc.data().title.includes(query))
-            if(doc.data)
+            if(doc.data().title.toLowerCase().includes(query.toLowerCase()))
             results.push({ ...doc.data(), id: doc.id });
           });
           setData(results);
@@ -47,7 +47,7 @@ export default function Search() {
     );
 
     return () => unsub();
-  }, []);
+  }, [queryString]);
 
   return (
     <div className="search">

@@ -2,9 +2,11 @@ import React from "react"
 import { useState } from "react"
 import { timestamp } from "../../firebase/config"
 import { useAuthContext } from "../../hooks/useAuthContext"
+import { useFirestore } from "../../hooks/useFirestore"
 
-export default function MerchComments() {
+export default function MerchComments({ merchandise }) {
   const { user } = useAuthContext()
+  const { updateDocument, response } = useFirestore('merchandises')
   const [newComment, setNewComment] = useState('')
 
   const handleSubmit = async (e) => {
@@ -16,7 +18,21 @@ export default function MerchComments() {
       createdAt: timestamp.fromDate(new Date()),
       id: Math.random()
     }
-    console.log(commentToAdd)
+
+    await updateDocument(merchandise.id, {
+        comments: [...merchandise.data().comments, commentToAdd],
+      })
+      if (!response.error) {
+        setNewComment('')
+        console.log(merchandise.data())
+        console.log(commentToAdd)
+        console.log(response)
+        
+      }
+      else if(response.error){
+        console.log(response)
+      }
+      
   }
 
   return (

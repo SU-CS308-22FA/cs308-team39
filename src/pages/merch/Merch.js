@@ -23,7 +23,8 @@ export default function Merch() {
       .onSnapshot((doc) => {
         if (doc.exists) {
           setIsPending(false);
-          setMerch(doc.data());
+          setMerch(doc);
+          console.log(doc.id)
         } else {
           setIsPending(false);
           setError("Could not find the merchandise");
@@ -45,12 +46,12 @@ export default function Merch() {
       {isPending && <p className="loading">Loading...</p>}
       {merch && (
         <>
-          <h2 className="page-title">{merch.title}</h2>
-          <p>{merch.description}</p>
-          <p>Quantity: {merch.rating}</p>
-          <p>{merch.price} TL</p>
+          <h2 className="page-title">{merch.data().title}</h2>
+          <p>{merch.data().description}</p>
+          <p>Quantity: {merch.data().rating}</p>
+          <p>{merch.data().price} TL</p>
           <button onClick={handleClick}>Update</button>
-          {user && <MerchComments/>}
+          {user && <MerchComments merchandise = {merch}/>}
           
         </>
       )}

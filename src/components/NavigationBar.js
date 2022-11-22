@@ -76,7 +76,7 @@ export default function NavBar() {
             <Link to={`/UserPage/${user.displayName}`}>
               Welcome, {user.displayName}
             </Link>
-            <Link onClick={logout}>Logout</Link>
+            <Link to="/" onClick={logout}>Logout</Link>
           </>
         )}
       </div>

@@ -2,7 +2,8 @@ import "./Create.css";
 import React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { projectFirestore } from "../../firebase/config";
+import { projectFirestore, projectStorage } from "../../firebase/config";
+import { useFirestore } from "../../hooks/useFirestore"
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -11,6 +12,7 @@ export default function Create() {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null)
   const [imageError, setImageError] = useState(null)
+  const { updateDocument, response } = useFirestore('merchandises')
   const history = useHistory();
 
   const handleFileChange = (e) => {
@@ -41,7 +43,21 @@ export default function Create() {
     const doc = { title, description, price, rating, comments: []};
 
     try {
-      await projectFirestore.collection("merchandises").add(doc);
+      // add the merch without the image url
+      const res = await projectFirestore.collection("merchandises").add(doc);
+      console.log(`new document id: ${res.id}` )
+      //upload the image
+      const uploadPath = `images/${res.id}/${image.name}`
+      console.log(uploadPath)
+
+      const img = await projectStorage.ref(uploadPath).put(image)
+      const imgUrl = await img.ref.getDownloadURL()
+      
+      //update the merch to have the uploaded image url
+      await updateDocument(res.id, {
+        imageURL: imgUrl,
+      })
+      
       history.push("/");
     } catch (err) {
       console.log(err);

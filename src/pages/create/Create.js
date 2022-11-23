@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { projectFirestore, projectStorage } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore"
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -14,6 +15,7 @@ export default function Create() {
   const [imageError, setImageError] = useState(null)
   const { updateDocument, response } = useFirestore('merchandises')
   const history = useHistory();
+  const { user } = useAuthContext();
 
   const handleFileChange = (e) => {
     setImage(null)
@@ -125,6 +127,7 @@ export default function Create() {
         </label>
 
         <button className="btn">submit</button>
+        {!user && <p className="error">Can not add merchandise if you are not logged in</p>} 
       </form>
     </div>
   );

@@ -4,10 +4,15 @@ import { timestamp } from "../../firebase/config"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { useFirestore } from "../../hooks/useFirestore"
 
+
+
 export default function MerchComments({ merchandise }) {
   const { user } = useAuthContext()
   const { updateDocument, response } = useFirestore('merchandises')
   const [newComment, setNewComment] = useState('')
+  
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,6 +24,8 @@ export default function MerchComments({ merchandise }) {
       id: Math.random()
     }
     
+    const date = commentToAdd.createdAt.toDate().toDateString()
+    console.log(date)
     await updateDocument(merchandise.id, {
         comments: [...merchandise.data().comments, commentToAdd],
       })
@@ -57,11 +64,11 @@ export default function MerchComments({ merchandise }) {
             <div className="comment-author">
               <p>{comment.displayName}</p>
             </div>
-            <div className="comment-date">
-              <p>date will appear in here</p>
-            </div>
             <div className="comment-content">
               <p>{comment.content}</p>
+            </div>
+            <div className="comment-date">
+              <p>{comment.createdAt.toDate().toDateString()}</p>
             </div>
           </li>
         ))}

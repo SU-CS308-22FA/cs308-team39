@@ -47,6 +47,7 @@ export default function Merch() {
       {merch && (
         <>
           <h2 className="page-title">{merch.data().title}</h2>
+          <img src={merch.data().imageURL} width="375" height="500" />
           <p>{merch.data().description}</p>
           <p>Quantity: {merch.data().rating}</p>
           <p>{merch.data().price} TL</p>

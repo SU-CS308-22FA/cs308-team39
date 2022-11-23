@@ -37,6 +37,8 @@
   .comment-content {
     color: black;
     font-size: 0.9em;
+    display: flex;
+    align-items: flex-start;
   }
   .add-comment label {
     margin-bottom: 0px;

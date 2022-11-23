@@ -33,5 +33,6 @@ export default function MerchList({ merchs }) {
         </div>
       ))}
     </div>
+    
   );
 }

@@ -46,17 +46,26 @@ export default function Create() {
       // add the merch without the image url
       const res = await projectFirestore.collection("merchandises").add(doc);
       console.log(`new document id: ${res.id}` )
-      //upload the image
-      const uploadPath = `images/${res.id}/${image.name}`
-      console.log(uploadPath)
+      if(image !== null){
+        //upload the image
+        const uploadPath = `images/${res.id}/${image.name}`
+        console.log(uploadPath)
 
-      const img = await projectStorage.ref(uploadPath).put(image)
-      const imgUrl = await img.ref.getDownloadURL()
+        const img = await projectStorage.ref(uploadPath).put(image)
+        const imgUrl = await img.ref.getDownloadURL()
       
-      //update the merch to have the uploaded image url
-      await updateDocument(res.id, {
-        imageURL: imgUrl,
-      })
+        //update the merch to have the uploaded image url
+        await updateDocument(res.id, {
+          imageURL: imgUrl,
+        })
+      }
+      else {
+        const defaultImageUrl = `https://firebasestorage.googleapis.com/v0/b/cs308group39.appspot.com/o/images%2Fdefault%2Ftff.png?alt=media&token=ca57d197-d6e2-445b-b528-fc9aa2d34698`
+        await updateDocument(res.id, {
+          imageURL: defaultImageUrl,
+        })
+      }
+      
       
       history.push("/");
     } catch (err) {
@@ -111,7 +120,6 @@ export default function Create() {
           <input
             type="file"
             onChange={handleFileChange}
-            required
           />
           {imageError && <div className="error">{imageError}</div>}
         </label>

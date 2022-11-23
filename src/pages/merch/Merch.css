@@ -9,6 +9,11 @@
   .merch-comments h4 {
     color: var(--heading-color);
   }
+
+  .merch-comments ul {
+    width: fit-content;
+  }
+
   .merch-comments li {
     padding: 16px;
     border-radius: 4px;
@@ -18,18 +23,29 @@
     background: #fff;
   }
   .comment-author {
-    display: list-item;
-    align-items: center;
-    color: var(--title-color);
+    display: flex;
+    align-items: flex-start;
+    color: grey;
   }
   .comment-date {
-    color: var(--text-color);
-    font-size: 0.9em;
+    display: flex;
+    align-items: flex-end;
+    color: grey;
+    font-size: 0.5em;
     margin: 4px 0 10px;
   }
   .comment-content {
-    color: var(--text-color);
+    color: black;
     font-size: 0.9em;
   }
+  .add-comment label {
+    margin-bottom: 0px;
+  }
+  .add-comment textarea {
+    min-height: 40px;
+    font-size: 1.5em;
+  }
+
+
   
   

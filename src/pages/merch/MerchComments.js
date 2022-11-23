@@ -39,17 +39,18 @@ export default function MerchComments({ merchandise }) {
     <div className="merch-comments">
       <h4>Comments</h4>
 
-      <form className="add-comment" onSubmit={handleSubmit}>
+      {user && <form className="add-comment" onSubmit={handleSubmit}>
         <label>
-          <span>Add new comment:</span>
+          <span>Add new comment: <br/></span>
           <textarea
             required
             onChange={(e) => setNewComment(e.target.value)}
             value={newComment}
           ></textarea>
+          <br/>
         </label>
         <button className="btn">Add Comment</button>
-      </form>
+      </form>}
       <ul>
         {merchandise.data().comments.length > 0 && merchandise.data().comments.map(comment => (
           <li key={comment.id}>

@@ -51,7 +51,7 @@ export default function Merch() {
           <p>Quantity: {merch.data().rating}</p>
           <p>{merch.data().price} TL</p>
           <button onClick={handleClick}>Update</button>
-          {user && <MerchComments merchandise = {merch}/>}
+          <MerchComments merchandise = {merch}/>
           
         </>
       )}

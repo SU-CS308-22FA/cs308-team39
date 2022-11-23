@@ -9,7 +9,32 @@ export default function Create() {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState("");
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null)
+  const [imageError, setImageError] = useState(null)
   const history = useHistory();
+
+  const handleFileChange = (e) => {
+    setImage(null)
+    let selected = e.target.files[0]
+    console.log(selected)
+
+    if (!selected) {
+      setImageError('Please select a file')
+      return
+    }
+    if (!selected.type.includes('image')){
+      setImageError('Selected file must be an image')
+      return
+    }
+    if (selected.size > 500000) {
+      setImageError('Image file size must be less than 500kb')
+      return
+    }
+
+    setImageError(null)
+    setImage(selected)
+    console.log('image updated')
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +89,15 @@ export default function Create() {
             value={rating}
             required
           />
+        </label>
+        <label>
+          <span>Add an image of your merchandise:</span>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            required
+          />
+          {imageError && <div className="error">{imageError}</div>}
         </label>
 
         <button className="btn">submit</button>

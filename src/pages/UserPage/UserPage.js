@@ -41,6 +41,7 @@ export default function UserPage() {
         type: "Type aaa",
       });
       console.log("type update");
+      setError(null);
     } catch (err) {
       console.log("1MY ERR: ", err.message);
       setError(err.message);
@@ -50,8 +51,23 @@ export default function UserPage() {
     //try to update account type
     try {
       const x = await projectFirestore.collection("users").get();
+      setError(null);
     } catch (err) {
       console.log("2MY ERR: ", err.message);
+      setError(err.message);
+    }
+  };
+  const thirdHandleClick = async () => {
+    //try to update account type
+    try {
+      await projectFirestore.collection("users").doc(user.uid).update({
+        username: "bartu",
+      });
+      console.log(user);
+      user.updateProfile({ displayName: "bartu" });
+      setError(null);
+    } catch (err) {
+      console.log("3MY ERR: ", err.message);
       setError(err.message);
     }
   };
@@ -66,6 +82,7 @@ export default function UserPage() {
           <h4>Account type: {type}</h4>
           <button onClick={handleClick}>Update account type</button>
           <button onClick={secondHandleClick}>Try to get every UID</button>
+          <button onClick={thirdHandleClick}>Update username</button>
           {error && <p>{error}</p>}
         </>
       )}

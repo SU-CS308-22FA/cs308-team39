@@ -22,18 +22,18 @@
   color: #fff;
 }
 #wrapper {
-  border: 1px solid blue;
+  border: 0px solid blue;
 }
 #first {
   display: inline-block;
   width: 120px;
   height: 120px;
-  border: 1px solid red;
+  border: 0px solid red;
 }
 #second {
   vertical-align: top;
   display: inline-block;
   max-width: 460px auto;
   height: 160px;
-  border: 1px solid green;
+  border: 0px solid green;
 }

@@ -23,10 +23,12 @@ export const useUpdateUser = () => {
       console.log("username update");
       setUpdateError(null);
       setUpdatePending(false);
+      return true;
     } catch (err) {
       console.log("Update UserUsername Error: ", err.message);
       setUpdateError(err.message);
       setUpdatePending(false);
+      return false;
     }
   };
   const updateUserPassword = async (password) => {
@@ -42,10 +44,12 @@ export const useUpdateUser = () => {
       console.log("password update");
       setUpdateError(null);
       setUpdatePending(false);
+      return true;
     } catch (err) {
       console.log("Update UserPassword Error: ", err.message);
       setUpdateError(err.message);
       setUpdatePending(false);
+      return false;
     }
   };
   const updateUserEmail = async (email) => {
@@ -61,10 +65,12 @@ export const useUpdateUser = () => {
       //await user.updateProfile({ email: email });
       console.log("email update");
       setUpdatePending(false);
+      return true;
     } catch (err) {
       console.log("Update UserEmail Error: ", err.message);
       setUpdateError(err.message);
       setUpdatePending(false);
+      return false;
     }
   };
   const updateUserPicture = async (picture) => {
@@ -78,10 +84,12 @@ export const useUpdateUser = () => {
       console.log("picture update");
       setUpdateError(null);
       setUpdatePending(false);
+      return true;
     } catch (err) {
       console.log("Update UserPicture Error: ", err.message);
       setUpdateError(err.message);
       setUpdatePending(false);
+      return false;
     }
   };
   const updateUserType = async (type, key) => {
@@ -98,10 +106,12 @@ export const useUpdateUser = () => {
       console.log("type update");
       setUpdateError(null);
       setUpdatePending(false);
+      return true;
     } catch (err) {
       console.log("Update UserType Error: ", err.message);
       setUpdateError(err.message);
       setUpdatePending(false);
+      return false;
     }
   };
   return {

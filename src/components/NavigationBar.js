@@ -34,58 +34,26 @@ export default function NavBar() {
           alt="Site Logo"
           src={process.env.PUBLIC_URL + "/logo-social.png"}
         />
-        <Searchbar
-          className="SearchBar"
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            marginTop: 1,
-          }}
-        />
-        {/* 
-        <Paper
-          className="SearchBar"
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            marginTop: 1,
-            width: 400,
-            height: 50,
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search"
-            inputProps={{ "aria-label": "search google maps" }}
-          />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-        </Paper>
-        */}
-        {!user && (
-          <>
+        <Searchbar className="SearchBar" />
+        <div className="LoginLogout">
+          {!user && (
             <div>
               <Link to="/login">Login</Link>
 
               <Link to="/signup">Signup</Link>
             </div>
-          </>
-        )}
-        {user && (
-          <>
-            <Link to={`/UserPage/${user.displayName}`}>
-              Welcome, {user.displayName}
-            </Link>
-            <Link to="/" onClick={logout}>
-              Logout
-            </Link>
-          </>
-        )}
+          )}
+          {user && (
+            <div>
+              <Link to={`/UserPage/${user.displayName}`}>
+                Welcome, {user.displayName}
+              </Link>
+              <Link to="/" onClick={logout}>
+                Logout
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
       <div className="LowerBar">
         <Link to="/">Home</Link>

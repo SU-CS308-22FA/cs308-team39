@@ -59,9 +59,9 @@ export default function UserPage() {
   }, []);
 
   const updateNameHandleSubmit = async (e) => {
-    //try to update account name
+    //try to update account newUsername
     e.preventDefault();
-    if ((await updateUserName(newUsername)) && !updateError) {
+    if (await updateUserName(newUsername)) {
       window.location.href = "/UserPage/" + newUsername;
     }
     const userRef = projectFirestore.collection("users").doc(user.uid);
@@ -69,9 +69,9 @@ export default function UserPage() {
     console.log("Document data:", doc.data());
   };
   const updateEmailHandleSubmit = async (e) => {
-    //try to update account name
+    //try to update account newEmail
     e.preventDefault();
-    if ((await updateUserEmail(newEmail)) && !updateError) {
+    if (await updateUserEmail(newEmail)) {
       window.location.href = "/UserPage/" + newUsername;
     }
     const userRef = projectFirestore.collection("users").doc(user.uid);
@@ -79,12 +79,11 @@ export default function UserPage() {
     console.log("Document data:", doc.data());
   };
   const updatePasswordHandleSubmit = async (e) => {
-    //try to update account name
+    //try to update account newPassword
     e.preventDefault();
     if (
       newPasswordConfirmation === newPassword &&
-      (await updateUserPassword(newPassword)) &&
-      !updateError
+      (await updateUserPassword(newPassword))
     ) {
       window.location.href = "/UserPage/" + newUsername;
     }
@@ -93,9 +92,9 @@ export default function UserPage() {
     console.log("Document data:", doc.data());
   };
   const updateTypeHandleSubmit = async (e) => {
-    //try to update account name
+    //try to update account newType
     e.preventDefault();
-    if ((await updateUserType(newType, key)) && !updateError) {
+    if (await updateUserType(newType, key)) {
       window.location.href = "/UserPage/" + newUsername;
     }
     const userRef = projectFirestore.collection("users").doc(user.uid);

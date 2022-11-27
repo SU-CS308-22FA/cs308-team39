@@ -2,8 +2,7 @@
 
 /* base styles */
 body {
-  min-width: 1000px;
-  width: auto;
+  min-width: 864px;
   font-family: Poppins, sans-serif;
   margin: 0;
   font-size: 1.1em;

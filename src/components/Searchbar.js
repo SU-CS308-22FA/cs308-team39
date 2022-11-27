@@ -16,6 +16,7 @@ export default function Searchbar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("BUTTON PRESS");
     history.push(`/search?q=${term}`);
   };
 
@@ -32,7 +33,7 @@ export default function Searchbar() {
             onChange={(e) => setTerm(e.target.value)}
             required
           />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+          <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
             <SearchIcon />
           </IconButton>
         </form>

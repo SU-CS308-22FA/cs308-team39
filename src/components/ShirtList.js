@@ -19,6 +19,7 @@ export default function ShirtsList({ shirts }) {
           <p>{shirt.price} TL</p>
           <Link to={`/merch/${shirt.id}`}>More</Link>
           <img
+            alt="x"
             className="delete"
             src={Delete}
             onClick={() => handleClick(shirt.id)}

@@ -17,7 +17,13 @@ export default function MerchList({ merchs }) {
       {merchs.map((merch) => (
         <div key={merch.id} className="card">
           <h3>{merch.title}</h3>
-          <img className="image" src={merch.imageURL} width="150 " height="200"  />
+          <img
+            alt="product"
+            className="image"
+            src={merch.imageURL}
+            width="150 "
+            height="200"
+          />
           <div>{merch.description.substring(0, 50)}...</div>
           <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
@@ -33,6 +39,5 @@ export default function MerchList({ merchs }) {
         </div>
       ))}
     </div>
-    
   );
 }

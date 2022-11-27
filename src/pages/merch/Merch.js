@@ -3,11 +3,11 @@ import "./Merch.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase/config";
-import { useAuthContext } from "../../hooks/useAuthContext";
+//import { useAuthContext } from "../../hooks/useAuthContext";
 import MerchComments from "./MerchComments";
 
 export default function Merch() {
-  const { user } = useAuthContext();
+  //const { user } = useAuthContext();
   const { id } = useParams();
 
   const [merch, setMerch] = useState(null);
@@ -24,7 +24,7 @@ export default function Merch() {
         if (doc.exists) {
           setIsPending(false);
           setMerch(doc);
-          console.log(doc.id)
+          console.log(doc.id);
         } else {
           setIsPending(false);
           setError("Could not find the merchandise");
@@ -47,13 +47,17 @@ export default function Merch() {
       {merch && (
         <>
           <h2 className="page-title">{merch.data().title}</h2>
-          <img src={merch.data().imageURL} width="375" height="500" />
+          <img
+            alt="product"
+            src={merch.data().imageURL}
+            width="375"
+            height="500"
+          />
           <p>{merch.data().description}</p>
           <p>Quantity: {merch.data().rating}</p>
           <p>{merch.data().price} TL</p>
           <button onClick={handleClick}>Update</button>
-          <MerchComments merchandise = {merch}/>
-          
+          <MerchComments merchandise={merch} />
         </>
       )}
     </div>

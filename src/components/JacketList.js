@@ -19,6 +19,7 @@ export default function JacketList({ jackets }) {
           <p>{jacket.price} TL</p>
           <Link to={`/merch/${jacket.id}`}>More</Link>
           <img
+            alt="x"
             className="delete"
             src={Delete}
             onClick={() => handleClick(jacket.id)}

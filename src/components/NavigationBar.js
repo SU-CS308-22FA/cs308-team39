@@ -1,24 +1,26 @@
 import React from "react";
 import "./NavigationBar.css";
+/*
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
+*/
 import { Link } from "react-router-dom";
 
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Searchbar from "./Searchbar";
 
-{/*
+/*
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
-})); */}
+})); */
 
 export default function NavBar() {
   //different buttons if logged in
@@ -32,13 +34,16 @@ export default function NavBar() {
           alt="Site Logo"
           src={process.env.PUBLIC_URL + "/logo-social.png"}
         />
-        <Searchbar className="SearchBar" component="form" sx={{
+        <Searchbar
+          className="SearchBar"
+          component="form"
+          sx={{
             p: "2px 4px",
             display: "flex",
             alignItems: "center",
             marginTop: 1,
-            
-          }}/>
+          }}
+        />
         {/* 
         <Paper
           className="SearchBar"
@@ -76,7 +81,9 @@ export default function NavBar() {
             <Link to={`/UserPage/${user.displayName}`}>
               Welcome, {user.displayName}
             </Link>
-            <Link to="/" onClick={logout}>Logout</Link>
+            <Link to="/" onClick={logout}>
+              Logout
+            </Link>
           </>
         )}
       </div>

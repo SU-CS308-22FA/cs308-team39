@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { projectFirestore } from "../firebase/config";
@@ -6,6 +6,9 @@ export const useUpdateUser = () => {
   const { user } = useAuthContext();
 
   const [updateError, setUpdateError] = useState(null);
+  const settUpdateError = (str) => {
+    setUpdateError(str);
+  };
   const [updatePending, setUpdatePending] = useState(false);
   const updateUserName = async (username) => {
     setUpdateError(null);
@@ -103,6 +106,7 @@ export const useUpdateUser = () => {
   };
   return {
     updateError,
+    settUpdateError,
     updatePending,
     updateUserName,
     updateUserPassword,

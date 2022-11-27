@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { projectFirestore, projectStorage } from "../../firebase/config";
-import { useFirestore } from "../../hooks/useFirestore"
+import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 export default function Create() {
@@ -11,64 +11,62 @@ export default function Create() {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState(null)
-  const [imageError, setImageError] = useState(null)
-  const { updateDocument, response } = useFirestore('merchandises')
+  const [image, setImage] = useState(null);
+  const [imageError, setImageError] = useState(null);
+  const { updateDocument /*,response*/ } = useFirestore("merchandises");
   const history = useHistory();
   const { user } = useAuthContext();
 
   const handleFileChange = (e) => {
-    setImage(null)
-    let selected = e.target.files[0]
-    console.log(selected)
+    setImage(null);
+    let selected = e.target.files[0];
+    console.log(selected);
 
     if (!selected) {
-      setImageError('Please select a file')
-      return
+      setImageError("Please select a file");
+      return;
     }
-    if (!selected.type.includes('image')){
-      setImageError('Selected file must be an image')
-      return
+    if (!selected.type.includes("image")) {
+      setImageError("Selected file must be an image");
+      return;
     }
     if (selected.size > 500000) {
-      setImageError('Image file size must be less than 500kb')
-      return
+      setImageError("Image file size must be less than 500kb");
+      return;
     }
 
-    setImageError(null)
-    setImage(selected)
-    console.log('image updated')
-  }
+    setImageError(null);
+    setImage(selected);
+    console.log("image updated");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const doc = { title, description, price, rating, comments: []};
+    const doc = { title, description, price, rating, comments: [] };
 
     try {
       // add the merch without the image url
       const res = await projectFirestore.collection("merchandises").add(doc);
-      console.log(`new document id: ${res.id}` )
-      if(image !== null){
+      console.log(`new document id: ${res.id}`);
+      if (image !== null) {
         //upload the image
-        const uploadPath = `images/${res.id}/${image.name}`
-        console.log(uploadPath)
+        const uploadPath = `images/${res.id}/${image.name}`;
+        console.log(uploadPath);
 
-        const img = await projectStorage.ref(uploadPath).put(image)
-        const imgUrl = await img.ref.getDownloadURL()
-      
+        const img = await projectStorage.ref(uploadPath).put(image);
+        const imgUrl = await img.ref.getDownloadURL();
+
         //update the merch to have the uploaded image url
         await updateDocument(res.id, {
           imageURL: imgUrl,
-        })
-      }
-      else {
-        const defaultImageUrl = `https://firebasestorage.googleapis.com/v0/b/cs308group39.appspot.com/o/images%2Fdefault%2Ftff.png?alt=media&token=ca57d197-d6e2-445b-b528-fc9aa2d34698`
+        });
+      } else {
+        const defaultImageUrl = `https://firebasestorage.googleapis.com/v0/b/cs308group39.appspot.com/o/images%2Fdefault%2Ftff.png?alt=media&token=ca57d197-d6e2-445b-b528-fc9aa2d34698`;
         await updateDocument(res.id, {
           imageURL: defaultImageUrl,
-        })
+        });
       }
-      
-      
+
       history.push("/");
     } catch (err) {
       console.log(err);
@@ -119,15 +117,16 @@ export default function Create() {
         </label>
         <label>
           <span>Add an image of your merchandise:</span>
-          <input
-            type="file"
-            onChange={handleFileChange}
-          />
+          <input type="file" onChange={handleFileChange} />
           {imageError && <div className="error">{imageError}</div>}
         </label>
 
         <button className="btn">submit</button>
-        {!user && <p className="error">Can not add merchandise if you are not logged in</p>} 
+        {!user && (
+          <p className="error">
+            Can not add merchandise if you are not logged in
+          </p>
+        )}
       </form>
     </div>
   );

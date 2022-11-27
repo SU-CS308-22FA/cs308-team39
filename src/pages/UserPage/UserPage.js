@@ -267,7 +267,7 @@ export default function UserPage() {
                           onChange={(e) => setNewType(e.target.value)}
                           value={newType}
                         />
-                        <p>Key:</p>
+                        <p>Official Key:</p>
                         <input
                           type="text"
                           onChange={(e) => setKey(e.target.value)}

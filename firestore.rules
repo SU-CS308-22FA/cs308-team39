@@ -14,12 +14,24 @@ service cloud.firestore {
       allow write: if request.auth.uid != null;
     }
     match /users/{uid}{
+    
     		allow read: if (request.auth.uid == uid) || (!request.resource
         	.data.hasAny(['uid','password','email',]));
-        allow write: if (request.auth.uid == uid) &&
-        (!request.resource.data.diff(resource.data).affectedKeys()
-        .hasOnly(['type']));
+        allow create: if (request.auth.uid == uid);
+        
+        	allow update: if (request.auth.uid == uid) &&
+        	(!request.resource.data.diff(resource.data).affectedKeys()
+        	.hasAny(['type']) || (resource.data.
+          key == "" && request.
+          resource.data.type == "customer")||(resource.data.
+          key == "galatasaraysecretkey" && request.
+          resource.data.type == "Galatasaray")|| (resource.data.
+          key == "besiktassecretkey" && request.
+          resource.data.type == "Besiktas")|| (resource.data.
+          key == "fenerbahcesecretkey" && request.
+          resource.data.type == "Fenerbahce"));
+          
+        
   	}   
 	}
 }
-//firebase deploy --only firestore (to set these rules.)

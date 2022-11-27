@@ -1,0 +1,39 @@
+.inputbox label {
+  margin-bottom: 0px;
+}
+.inputbox textarea {
+  min-height: 40px;
+  font-size: 1.5em;
+}
+.btnUserPage {
+  background: none;
+  border: 1px solid #6219b6;
+  padding: 0px 0px;
+  margin-bottom: 0px;
+  margin-left: 33px;
+  border-radius: 3px;
+  color: #372294;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+}
+.btnUserPage:hover {
+  background: #93e7b6;
+  color: #fff;
+}
+#wrapper {
+  border: 1px solid blue;
+}
+#first {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  border: 1px solid red;
+}
+#second {
+  vertical-align: top;
+  display: inline-block;
+  max-width: 460px auto;
+  height: 160px;
+  border: 1px solid green;
+}

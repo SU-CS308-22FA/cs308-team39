@@ -44,14 +44,28 @@ export default function NavBar() {
             </div>
           )}
           {user && (
-            <div>
-              <Link to={`/UserPage/${user.displayName}`}>
-                Welcome, {user.displayName}
-              </Link>
+            <>
+              <div className="subnav">
+                <button className="subnavbtn">
+                  Welcome, {user.displayName}
+                  <div className="subUsernav">
+                    <Link to={"/UserPage/" + user.displayName}>
+                      User Information
+                    </Link>
+                    <Link to={"/" + user.displayName + "/Addresses"}>
+                      Addresses
+                    </Link>
+                    <Link to={"/" + user.displayName + "/Orders"}>Orders</Link>
+                    <Link to={"/" + user.displayName + "/Favorites"}>
+                      Favorites
+                    </Link>
+                  </div>
+                </button>
+              </div>{" "}
               <Link to="/" onClick={logout}>
                 Logout
               </Link>
-            </div>
+            </>
           )}
         </div>
       </div>

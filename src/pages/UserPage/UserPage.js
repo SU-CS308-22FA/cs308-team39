@@ -1,11 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { projectFirestore, projectStorage } from "../../firebase/config";
+import { projectFirestore } from "../../firebase/config";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
-import { useFirestore } from "../../hooks/useFirestore";
 import "react-phone-input-2/lib/style.css";
 import "./UserPage.css";
+
 export default function UserPage() {
   const { user } = useAuthContext();
   const {
@@ -19,7 +19,6 @@ export default function UserPage() {
     updateUserPicture,
     updateUserType,
   } = useUpdateUser();
-
   const [flag, setFlag] = useState(-1);
   const [newUsername, setNewUsername] = useState(user.displayName);
   const [newEmail, setNewEmail] = useState(user.email);
@@ -27,7 +26,6 @@ export default function UserPage() {
   const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
   const [newType, setNewType] = useState("");
   const [newPic, setNewPic] = useState(null);
-  //const [newPic, setNewPic] = useState("");
   const [key, setKey] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [pic, setPic] = useState(null);
@@ -36,7 +34,6 @@ export default function UserPage() {
   const [type, setType] = useState("");
   const [pictureError, setPictureError] = useState(null);
   const [password, setPassword] = useState("");
-  const { updateDocument /*,response*/ } = useFirestore("users");
   useEffect(() => {
     setError(null);
     try {
@@ -179,24 +176,28 @@ export default function UserPage() {
   };
   return (
     <>
-      <h1 align="center">User Page</h1>
+      <h1 align="center">User Information</h1>
       {user && (
         <div id="wrapper">
           {/*Profile Picture (First)*/}
-          {(flag === -1 || flag === 0 || flag === 5) && (
+          {((flag === -1 || flag === 0 || flag === 5) && (
             <div id="first">
               <img className="profilePic" src={pic} alt="ProfilePicture"></img>
               <div>
                 {flag === 0 && (
                   <button className="btnPic" onClick={() => setFlag(5)}>
-                    UPDATE
+                    Update
                   </button>
                 )}
               </div>
             </div>
-          )}
+          )) || <div id="dummydiv"></div>}
           <div id="second">
-            <h3 align="center">User Information:</h3>
+            {(flag === 0 && (
+              <h4 className="fadein" align="center">
+                Please Select
+              </h4>
+            )) || <br></br>}
             {{
               /*picture update*/
             } &&
@@ -310,7 +311,6 @@ export default function UserPage() {
                 )}
               </h4>
             )}
-
             {/*Password*/}
             {(flag === -1 || flag === 0 || flag === 3) && (
               <h4>
@@ -479,6 +479,7 @@ export default function UserPage() {
               </button>
             )}
           </div>
+
           <div id="fourth">
             {flag === -1 && (
               <button className="btnUserPage" onClick={() => setFlag(0)}>

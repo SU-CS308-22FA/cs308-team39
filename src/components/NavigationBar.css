@@ -92,8 +92,29 @@
   background-color: #eee;
   color: black;
 }
-
 /* Open the drop down menus */
 .subnav:hover .subnav-content {
+  display: block;
+}
+
+/*User Navigation Part*/
+.subUsernav {
+  display: none;
+  position: absolute;
+  right: 116px;
+  background-color: rgb(90, 90, 90);
+  max-width: 200px;
+  z-index: 1;
+}
+.subUsernav a {
+  float: left;
+  color: white;
+  text-decoration: none;
+}
+.subUsernav a:hover {
+  background-color: #eee;
+  color: black;
+}
+.subnav:hover .subUsernav {
   display: block;
 }

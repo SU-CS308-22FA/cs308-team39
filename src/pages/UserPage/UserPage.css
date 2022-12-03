@@ -8,7 +8,46 @@
 div {
   display: block;
 }
+input {
+  padding: 8px 6px;
+  font-size: 1em;
+  color: #777;
+  width: 70%;
+}
+@keyframes clickit {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.fadein {
+  animation: clickit 6s;
+}
+.btnUserPage2 {
+  animation: fadeOut 3s;
+  background: none;
+  border: 1px solid #6219b6;
+  padding: 0px 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  border-radius: 3px;
+  color: #372294;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+}
 .btnUserPage {
+  animation: clickit 0.9s;
   background: none;
   border: 1px solid #6219b6;
   padding: 0px 0px;
@@ -25,7 +64,7 @@ div {
   max-height: 120px;
 }
 .btnUserPage:hover {
-  background: #93e7b6;
+  background: #00ff6a;
   color: #fff;
 }
 #wrapper {
@@ -35,16 +74,27 @@ div {
   max-width: 900px;
   min-width: 400px;
 }
+#dummydiv {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  margin-left: -10 auto;
+  margin-right: 5px;
+}
 #first {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 120px;
-  height: 160px;
+  height: 120px;
   margin-left: -10 auto;
   margin-right: 5px;
   border: 0px solid red;
+  background-color: rgba(66, 66, 66, 0.336);
 }
 #first img {
   width: 100%;

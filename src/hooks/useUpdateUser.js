@@ -1,10 +1,11 @@
 //import React from "react";
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
-import { projectFirestore } from "../firebase/config";
+import { useFirestore } from "./useFirestore";
+import { projectFirestore, projectStorage } from "../firebase/config";
 export const useUpdateUser = () => {
   const { user } = useAuthContext();
-
+  const { updateDocument /*,response*/ } = useFirestore("users");
   const [updateError, setUpdateError] = useState(null);
   const settUpdateError = (str) => {
     setUpdateError(str);
@@ -73,14 +74,21 @@ export const useUpdateUser = () => {
       return false;
     }
   };
-  const updateUserPicture = async (picture) => {
+  const updateUserPicture = async (newPic) => {
     setUpdateError(null);
     setUpdatePending(true);
     //try to update account picture
     try {
-      await projectFirestore.collection("users").doc(user.uid).update({
-        pic: picture,
+      //upload the pic
+      const userRef = projectFirestore.collection("users").doc(user.uid);
+      const uploadPath = `users/${userRef.id}/${newPic.name}`;
+      console.log(uploadPath);
+      const img = await projectStorage.ref(uploadPath).put(newPic);
+      const imgUrl = await img.ref.getDownloadURL();
+      await updateDocument(userRef.id, {
+        pic: imgUrl,
       });
+      console.log(imgUrl);
       console.log("picture update");
       setUpdateError(null);
       setUpdatePending(false);
@@ -114,6 +122,25 @@ export const useUpdateUser = () => {
       return false;
     }
   };
+  const updatePhone = async (phone) => {
+    setUpdateError(null);
+    setUpdatePending(true);
+    //try to update account type
+    try {
+      await projectFirestore.collection("users").doc(user.uid).update({
+        phone: phone,
+      });
+      console.log("Phone update");
+      setUpdateError(null);
+      setUpdatePending(false);
+      return true;
+    } catch (err) {
+      console.log("Update Phone Error: ", err.message);
+      setUpdateError(err.message);
+      setUpdatePending(false);
+      return false;
+    }
+  };
   return {
     updateError,
     settUpdateError,
@@ -123,5 +150,6 @@ export const useUpdateUser = () => {
     updateUserEmail,
     updateUserPicture,
     updateUserType,
+    updatePhone,
   };
 };

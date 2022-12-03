@@ -4,6 +4,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore, projectStorage } from "../../firebase/config";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import { useFirestore } from "../../hooks/useFirestore";
+import "react-phone-input-2/lib/style.css";
 import "./UserPage.css";
 export default function UserPage() {
   const { user } = useAuthContext();
@@ -11,10 +12,11 @@ export default function UserPage() {
     updateError,
     settUpdateError,
     updatePending,
+    updatePhone,
     updateUserName,
     updateUserPassword,
     updateUserEmail,
-    //updateUserPicture,
+    updateUserPicture,
     updateUserType,
   } = useUpdateUser();
 
@@ -24,10 +26,12 @@ export default function UserPage() {
   const [newPassword, setNewPassword] = useState(user.password);
   const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
   const [newType, setNewType] = useState("");
+  const [newPic, setNewPic] = useState(null);
   //const [newPic, setNewPic] = useState("");
   const [key, setKey] = useState("");
+  const [newPhone, setNewPhone] = useState("");
   const [pic, setPic] = useState(null);
-  const [newPic, setNewPic] = useState(null);
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
   const [type, setType] = useState("");
   const [pictureError, setPictureError] = useState(null);
@@ -48,19 +52,28 @@ export default function UserPage() {
         }
         //console.log("doc: ", doc);
         setPic(doc.get("pic"));
+        setPhone(doc.get("phone"));
         setType(doc.get("type"));
-        console.log("type:", doc.get("type"));
         setPassword(doc.get("password"));
-        console.log("password:", doc.get("password"));
       };
       fetchData();
+      console.log("Got user data.");
       setError(null);
     } catch (err) {
       console.log(err.message);
       setError(err.message);
     }
   }, []);
+  const addPhoneSpaces = (phoneNumber) => {
+    const number = phoneNumber.trim().replace(/[^0-9]/g, "");
 
+    if (number.length < 4) return setNewPhone(number);
+    if (number.length < 7)
+      return setNewPhone(number.replace(/(\d{3})(\d{1})/, "$1-$2"));
+    if (number.length < 11)
+      return setNewPhone(number.replace(/(\d{3})(\d{3})(\d{1})/, "$1-$2-$3"));
+    return setNewPhone(number.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3"));
+  };
   const updateNameHandleSubmit = async (e) => {
     //try to update account newUsername
     e.preventDefault();
@@ -98,6 +111,16 @@ export default function UserPage() {
     const doc = await userRef.get();
     console.log("Document data:", doc.data());
   };
+  const updatePhoneHandleSubmit = async (e) => {
+    //try to update account newType
+    e.preventDefault();
+    if (await updatePhone(newPhone)) {
+      window.location.href = "/UserPage/" + newUsername;
+    }
+    const userRef = projectFirestore.collection("users").doc(user.uid);
+    const doc = await userRef.get();
+    console.log("Document data:", doc.data());
+  };
   const updateTypeHandleSubmit = async (e) => {
     //try to update account newType
     e.preventDefault();
@@ -110,22 +133,12 @@ export default function UserPage() {
   };
   const updatePictureHandleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const userRef = projectFirestore.collection("users").doc(user.uid);
-      if (newPic !== null && !pictureError) {
-        //upload the pic
-        const uploadPath = `users/${userRef.id}/${pic.name}`;
-        console.log(uploadPath);
-        const img = await projectStorage.ref(uploadPath).put(newPic);
-        const imgUrl = await img.ref.getDownloadURL();
-        await updateDocument(userRef.id, {
-          pic: imgUrl,
-        });
-        console.log(imgUrl);
-        window.location.href = "/UserPage/" + newUsername;
-      }
-    } catch (err) {
-      console.log(err);
+    if (
+      newPic !== null &&
+      !pictureError &&
+      (await updateUserPicture(newPic, key))
+    ) {
+      window.location.href = "/UserPage/" + newUsername;
     }
   };
   const handleFileChange = (e) => {
@@ -150,13 +163,26 @@ export default function UserPage() {
     setNewPic(selected);
     console.log("image updated");
   };
+  let handleOnChange = (value) => {
+    setPhone(value);
+  };
 
+  let handleOnChangephone = (e) => {
+    setPhone(e.target.value);
+  }; /*
+  let handleOnPhoneChange = (value) => {
+    setNewPhone(value);
+  };
+*/
+  let handleOnPhoneChange = (e) => {
+    setNewPhone(e.target.value);
+  };
   return (
     <>
       <h1 align="center">User Page</h1>
       {user && (
         <div id="wrapper">
-          {/*Profile Picture*/}
+          {/*Profile Picture (First)*/}
           {(flag === -1 || flag === 0 || flag === 5) && (
             <div id="first">
               <img className="profilePic" src={pic} alt="ProfilePicture"></img>
@@ -184,6 +210,11 @@ export default function UserPage() {
                     {pictureError !== null && <p>{pictureError}</p>}
                     {!updatePending && !pictureError && (
                       <button className="btn">Upload Picture</button>
+                    )}
+
+                    {updateError && <p>{updateError}</p>}
+                    {updatePending && (
+                      <button className="btn">isPending</button>
                     )}
                   </form>
                   <button
@@ -279,6 +310,7 @@ export default function UserPage() {
                 )}
               </h4>
             )}
+
             {/*Password*/}
             {(flag === -1 || flag === 0 || flag === 3) && (
               <h4>
@@ -376,6 +408,48 @@ export default function UserPage() {
                 )}
               </h4>
             )}
+            {/*Phone*/}
+            {(flag === -1 || flag === 0 || flag === 6) && (
+              <h4>
+                Phone: {phone}
+                {/*flag === 0 && (
+                  <button className="btnUserPage" onClick={() => setFlag(6)}>
+                    Update
+                  </button>
+                )*/}
+                {flag === 6 && (
+                  <>
+                    <form onSubmit={updatePhoneHandleSubmit}>
+                      <label>
+                        <p>Set Phone:</p>
+                        <input
+                          type="tel"
+                          maxlength="12"
+                          onChange={(e) => addPhoneSpaces(e.target.value)}
+                          value={newPhone}
+                        />
+                      </label>
+                      {!updatePending && (
+                        <button className="btn">Set Phone</button>
+                      )}
+                      {updateError && <p>{updateError}</p>}
+                      {updatePending && (
+                        <button className="btn">isPending</button>
+                      )}
+                    </form>
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        setFlag(0);
+                        settUpdateError(null);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+              </h4>
+            )}
           </div>
           <div id="third">
             <br></br>
@@ -384,7 +458,6 @@ export default function UserPage() {
                 Update
               </button>
             )}
-
             {flag === 0 && (
               <button className="btnUserPage" onClick={() => setFlag(2)}>
                 Update
@@ -397,6 +470,11 @@ export default function UserPage() {
             )}
             {flag === 0 && (
               <button className="btnUserPage" onClick={() => setFlag(4)}>
+                Update
+              </button>
+            )}{" "}
+            {flag === 0 && (
+              <button className="btnUserPage" onClick={() => setFlag(6)}>
                 Update
               </button>
             )}

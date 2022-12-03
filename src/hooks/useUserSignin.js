@@ -31,11 +31,13 @@ export const useLogin = () => {
 
       setIsPending(false);
       setError(null);
+      return true;
     } catch (err) {
       setFlag(0);
       console.log(err.message);
       setError(err.message);
       setIsPending(false);
+      return false;
     }
   };
 

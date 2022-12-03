@@ -16,10 +16,15 @@ export default function Signup() {
   const { signup, isPending, error, flag } = useSignup();
   //const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(email, password, displayName);
-    signup(email, password, displayName);
+
+    if (await signup(email, password, displayName)) {
+      console.log("successfull signup, rerouting to homepage.");
+      window.location.href = "/";
+    }
+    console.log(flag.toString);
   };
 
   return (

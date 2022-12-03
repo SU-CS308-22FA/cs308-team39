@@ -14,10 +14,14 @@ export default function Login() {
 
   const { signin, isPending, error, flag } = useLogin();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(email, password);
-    signin(email, password);
+
+    if (await signin(email, password)) {
+      console.log("successfull login, rerouting to homepage.");
+      window.location.href = "/";
+    }
   };
 
   return (

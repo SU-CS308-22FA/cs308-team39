@@ -80,12 +80,16 @@ export default function UserPage() {
   };
   const updatePasswordHandleSubmit = async (e) => {
     //try to update account newPassword
+    setError(null);
     e.preventDefault();
     if (
       newPasswordConfirmation === newPassword &&
       (await updateUserPassword(newPassword))
     ) {
       window.location.href = "/UserPage/" + newUsername;
+    }
+    if (newPasswordConfirmation !== newPassword) {
+      setError("Passwords don't match.");
     }
     const userRef = projectFirestore.collection("users").doc(user.uid);
     const doc = await userRef.get();
@@ -103,31 +107,23 @@ export default function UserPage() {
   };
   return (
     <>
-      {user && !error && (
+      <h1 align="center">User Page</h1>
+      {user && (
         <div id="wrapper">
           <div id="first">
-            <p>My Profile</p>
-            <img width="100" height="100" src={pic} alt="ProfilePicture"></img>
+            <img className="profilePic" src={pic} alt="ProfilePicture"></img>
           </div>
           <div id="second">
-            {flag === -1 && (
-              <button className="btnUserPage" onClick={() => setFlag(0)}>
-                Update
-              </button>
-            )}
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(-1)}>
-                Cancel
-              </button>
-            )}{" "}
+            {/*Display Name*/}
             {(flag === -1 || flag === 0 || flag === 1) && (
               <h4>
+                <h4 align="center">User Information:</h4>
                 Name: {user.displayName}
-                {flag === 0 && (
+                {/*flag === 0 && (
                   <button className="btnUserPage" onClick={() => setFlag(1)}>
                     Update
                   </button>
-                )}
+                )*/}
                 {flag === 1 && (
                   <>
                     <form onSubmit={updateNameHandleSubmit}>
@@ -160,14 +156,15 @@ export default function UserPage() {
                 )}
               </h4>
             )}
+            {/*Email*/}
             {(flag === -1 || flag === 0 || flag === 2) && (
               <h4>
                 Email: {user.email}
-                {flag === 0 && (
+                {/*flag === 0 && (
                   <button className="btnUserPage" onClick={() => setFlag(2)}>
                     Update
                   </button>
-                )}
+                )*/}
                 {flag === 2 && (
                   <>
                     <form onSubmit={updateEmailHandleSubmit}>
@@ -199,28 +196,29 @@ export default function UserPage() {
                   </>
                 )}
               </h4>
-            )}{" "}
+            )}
+            {/*Password*/}
             {(flag === -1 || flag === 0 || flag === 3) && (
               <h4>
-                Password: {password}
-                {flag === 0 && (
+                Password: {"*".repeat(password.length)}
+                {/*flag === 0 && (
                   <button className="btnUserPage" onClick={() => setFlag(3)}>
                     Update
                   </button>
-                )}
+                )*/}
                 {flag === 3 && (
                   <>
                     <form onSubmit={updatePasswordHandleSubmit}>
                       <label>
                         <p>New Password:</p>
                         <input
-                          type="text"
+                          type="password"
                           onChange={(e) => setNewPassword(e.target.value)}
                           value={newPassword}
-                        />{" "}
+                        />
                         <p>Please write again:</p>
                         <input
-                          type="text"
+                          type="password"
                           onChange={(e) =>
                             setNewPasswordConfirmation(e.target.value)
                           }
@@ -230,7 +228,8 @@ export default function UserPage() {
                       {!updatePending && (
                         <button className="btn">Set Password</button>
                       )}
-                      {updateError && <p>{updateError}</p>}
+                      {error && <p>{error}</p>}
+                      {!error && updateError && <p>{updateError}</p>}
                       {updatePending && (
                         <button className="btn">isPending</button>
                       )}
@@ -248,14 +247,15 @@ export default function UserPage() {
                 )}
               </h4>
             )}
+            {/*Type*/}
             {(flag === -1 || flag === 0 || flag === 4) && (
               <h4>
-                Account type: {type}{" "}
-                {flag === 0 && (
+                Account type: {type}
+                {/*flag === 0 && (
                   <button className="btnUserPage" onClick={() => setFlag(4)}>
                     Update
                   </button>
-                )}
+                )*/}
                 {flag === 4 && (
                   <>
                     <form onSubmit={updateTypeHandleSubmit}>
@@ -293,6 +293,42 @@ export default function UserPage() {
                   </>
                 )}
               </h4>
+            )}
+          </div>
+          <div id="third">
+            <br></br>
+            {flag === 0 && (
+              <button className="btnUserPage" onClick={() => setFlag(1)}>
+                Update
+              </button>
+            )}
+
+            {flag === 0 && (
+              <button className="btnUserPage" onClick={() => setFlag(2)}>
+                Update
+              </button>
+            )}
+            {flag === 0 && (
+              <button className="btnUserPage" onClick={() => setFlag(3)}>
+                Update
+              </button>
+            )}
+            {flag === 0 && (
+              <button className="btnUserPage" onClick={() => setFlag(4)}>
+                Update
+              </button>
+            )}
+          </div>
+          <div id="fourth">
+            {flag === -1 && (
+              <button className="btnUserPage" onClick={() => setFlag(0)}>
+                Update
+              </button>
+            )}
+            {flag === 0 && (
+              <button className="btnUserPage" onClick={() => setFlag(-1)}>
+                Cancel
+              </button>
             )}
           </div>
         </div>

@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { projectFirestore } from "../../firebase/config";
+import { projectFirestore, projectStorage } from "../../firebase/config";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
+import { useFirestore } from "../../hooks/useFirestore";
 import "./UserPage.css";
 export default function UserPage() {
   const { user } = useAuthContext();
@@ -25,11 +26,13 @@ export default function UserPage() {
   const [newType, setNewType] = useState("");
   //const [newPic, setNewPic] = useState("");
   const [key, setKey] = useState("");
-
+  const [pic, setPic] = useState(null);
+  const [newPic, setNewPic] = useState(null);
   const [error, setError] = useState(null);
   const [type, setType] = useState("");
-  const [pic, setPic] = useState("");
+  const [pictureError, setPictureError] = useState(null);
   const [password, setPassword] = useState("");
+  const { updateDocument /*,response*/ } = useFirestore("users");
   useEffect(() => {
     setError(null);
     try {
@@ -105,19 +108,98 @@ export default function UserPage() {
     const doc = await userRef.get();
     console.log("Document data:", doc.data());
   };
+  const updatePictureHandleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const userRef = projectFirestore.collection("users").doc(user.uid);
+      if (newPic !== null && !pictureError) {
+        //upload the pic
+        const uploadPath = `users/${userRef.id}/${pic.name}`;
+        console.log(uploadPath);
+        const img = await projectStorage.ref(uploadPath).put(newPic);
+        const imgUrl = await img.ref.getDownloadURL();
+        await updateDocument(userRef.id, {
+          pic: imgUrl,
+        });
+        console.log(imgUrl);
+        window.location.href = "/UserPage/" + newUsername;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleFileChange = (e) => {
+    setNewPic(null);
+    let selected = e.target.files[0];
+    console.log(selected);
+
+    if (!selected) {
+      setPictureError("Please select a file");
+      return;
+    }
+    if (!selected.type.includes("image")) {
+      setPictureError("Selected file must be an image");
+      return;
+    }
+    if (selected.size > 500000) {
+      setPictureError("Image file size must be less than 500kb");
+      return;
+    }
+
+    setPictureError(null);
+    setNewPic(selected);
+    console.log("image updated");
+  };
+
   return (
     <>
       <h1 align="center">User Page</h1>
       {user && (
         <div id="wrapper">
-          <div id="first">
-            <img className="profilePic" src={pic} alt="ProfilePicture"></img>
-          </div>
+          {/*Profile Picture*/}
+          {(flag === -1 || flag === 0 || flag === 5) && (
+            <div id="first">
+              <img className="profilePic" src={pic} alt="ProfilePicture"></img>
+              <div>
+                {flag === 0 && (
+                  <button className="btnPic" onClick={() => setFlag(5)}>
+                    UPDATE
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
           <div id="second">
+            <h3 align="center">User Information:</h3>
+            {{
+              /*picture update*/
+            } &&
+              flag === 5 && (
+                <>
+                  <form onSubmit={updatePictureHandleSubmit}>
+                    <label>
+                      <p>New Picture:</p>
+                      <input type="file" onChange={handleFileChange} />
+                    </label>
+                    {pictureError !== null && <p>{pictureError}</p>}
+                    {!updatePending && !pictureError && (
+                      <button className="btn">Upload Picture</button>
+                    )}
+                  </form>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setFlag(0);
+                      settUpdateError(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
             {/*Display Name*/}
             {(flag === -1 || flag === 0 || flag === 1) && (
               <h4>
-                <h4 align="center">User Information:</h4>
                 Name: {user.displayName}
                 {/*flag === 0 && (
                   <button className="btnUserPage" onClick={() => setFlag(1)}>

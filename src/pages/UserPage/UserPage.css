@@ -12,7 +12,7 @@ input {
   padding: 8px 6px;
   font-size: 1em;
   color: #777;
-  width: 70%;
+  width: 416px;
 }
 @keyframes clickit {
   0% {
@@ -60,13 +60,15 @@ input {
   font-size: 1em;
 }
 .profilePic {
-  max-width: 120px;
-  max-height: 120px;
+  height: 150px;
+  width: 150px;
+  border-radius: 5%;
+  overflow: hidden;
 }
-.btnUserPage:hover {
-  background: #00ff6a;
-  color: #fff;
+.profilePic img {
+  width: 100%;
 }
+
 #wrapper {
   display: flex;
   border: 0px solid blue;
@@ -74,77 +76,22 @@ input {
   max-width: 900px;
   min-width: 400px;
 }
-#dummydiv {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 120px;
-  height: 120px;
-  margin-left: -10 auto;
-  margin-right: 5px;
-}
 #first {
-  position: relative;
-  display: block;
-  align-items: center;
-  justify-content: center;
-  width: 220px;
-  height: 400px;
-  margin-left: -10 auto;
-  margin-right: 5px;
-  border: 0px solid red;
-  background-color: rgba(122, 122, 122, 0);
+  display: inline-block;
+  vertical-align: top;
+  height: 200px;
+  border: 0px solid green;
+  margin-left: auto;
+  min-width: 150px;
+  max-width: 250px;
 }
-#first img {
-  width: 100%;
-  height: auto;
-}
-
-.btnPic {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-
-  font-size: 10px;
-  padding: 12px 24px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.btnPic:hover {
-  background-color: rgb(0, 255, 157);
-}
-
 #second {
   display: inline-block;
   vertical-align: top;
   height: 200px;
   border: 0px solid green;
   margin-right: auto;
-  margin-left: auto;
   min-width: 277;
-}
-#third {
-  display: inline-block;
-  vertical-align: top;
-  width: 80px;
-  height: 160px;
-  margin-left: 5px;
-  margin-right: auto;
-  text-align: left;
-  border: 0px solid rgb(255, 0, 170);
-}
-#fourth {
-  vertical-align: top;
-  width: 80px;
-  height: 160px;
-
-  text-align: right;
-  border: 0px solid rgb(255, 0, 170);
 }
 
 .btnwide {
@@ -156,7 +103,7 @@ input {
   color: #1f9751;
   font-weight: bold;
   font-size: 1em;
-  width: 73.1%;
+  width: 432px;
   display: inline-block;
 }
 .btnwide:hover {

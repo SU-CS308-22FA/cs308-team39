@@ -73,57 +73,6 @@ export default function UserPage() {
       return setNewPhone(number.replace(/(\d{3})(\d{3})(\d{1})/, "$1-$2-$3"));
     return setNewPhone(number.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3"));
   };
-  const updateNameHandleSubmit = async (e) => {
-    //try to update account newUsername
-    e.preventDefault();
-    if (await updateUserName(newUsername)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  const updateEmailHandleSubmit = async (e) => {
-    //try to update account newEmail
-    e.preventDefault();
-    if (await updateUserEmail(newEmail)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  const updatePasswordHandleSubmit = async (e) => {
-    //try to update account newPassword
-    setError(null);
-    e.preventDefault();
-    if (
-      newPasswordConfirmation === newPassword &&
-      (await updateUserPassword(newPassword))
-    ) {
-      return true;
-    } else if (newPasswordConfirmation !== newPassword) {
-      setError("Passwords don't match.");
-      return false;
-    }
-    return false;
-  };
-  const updatePhoneHandleSubmit = async (e) => {
-    //try to update account newType
-    e.preventDefault();
-    if (await updatePhone(newPhone)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  const updateTypeHandleSubmit = async (e) => {
-    //try to update account newType
-    e.preventDefault();
-    if (await updateUserType(newType, key)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
   const updatePictureHandleSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -131,19 +80,47 @@ export default function UserPage() {
       !pictureError &&
       (await updateUserPicture(newPic, key))
     ) {
-      window.location.href = "/UserPage/" + newUsername;
+      //window.location.href = "/UserPage/" + newUsername;
     }
   };
   const handleOnUpdate = async (e) => {
-    if (
-      (await updateNameHandleSubmit()) &&
-      (await updateEmailHandleSubmit()) &&
-      (await updatePasswordHandleSubmit()) &&
-      (await updatePhoneHandleSubmit()) &&
-      (await updateTypeHandleSubmit())
+    e.preventDefault();
+    console.log("handle on update start");
+    if (newPasswordConfirmation !== newPassword) {
+      setError("Passwords don't match.");
+    } else if (
+      (await updateUserName(newUsername)) &&
+      (await updateUserEmail(newEmail)) &&
+      (await updateUserPassword(newPassword)) &&
+      (await updatePhone(newPhone)) &&
+      (await updateUserType(newType, key))
     ) {
+      setError(null);
+      console.log("handle on update end");
       window.location.href = "/UserPage/" + newUsername;
     }
+  };
+  const handleFileChange = (e) => {
+    setNewPic(null);
+    let selected = e.target.files[0];
+    console.log(selected);
+
+    if (!selected) {
+      setPictureError("Please select a file");
+      return;
+    }
+    if (!selected.type.includes("image")) {
+      setPictureError("Selected file must be an image");
+      return;
+    }
+    if (selected.size > 500000) {
+      setPictureError("Image file size must be less than 500kb");
+      return;
+    }
+
+    setPictureError(null);
+    setNewPic(selected);
+    console.log("image updated");
   };
   return (
     <>
@@ -153,22 +130,23 @@ export default function UserPage() {
           {/*Profile Picture (First)*/}
           {
             <div id="first">
-              <img className="profilePic" src={pic} alt="ProfilePicture"></img>
+              <div className="profilePic">
+                <img src={pic} alt="ProfilePicture"></img>
+              </div>
+              {/*picture update*/}
+              <form onSubmit={updatePictureHandleSubmit}>
+                <label>
+                  <p>New Picture:</p>
+                  <input type="file" onChange={handleFileChange} />
+                </label>
+                {pictureError !== null && <p>{pictureError}</p>}
+                {!updatePending && !pictureError && (
+                  <button className="btn">Upload Picture</button>
+                )}
+              </form>
             </div>
           }
           <div id="second">
-            {/*picture update*/}
-            <form onSubmit={updatePictureHandleSubmit}>
-              <label>
-                <p>New Picture:</p>
-                <input type="file" onChange={handleFileChange} />
-              </label>
-              {pictureError !== null && <p>{pictureError}</p>}
-              {!updatePending && !pictureError && (
-                <button className="btn">Upload Picture</button>
-              )}
-            </form>
-
             <form onSubmit={handleOnUpdate}>
               {/*Display Name*/}
               <div>
@@ -234,22 +212,16 @@ export default function UserPage() {
                     Update Account Information
                   </button>
                 )}
-                {updateError && <p>{updateError}</p>}
+                {updateError !== "Missing or insufficient permissions." &&
+                  updateError && <p>{updateError}</p>}
+                {updateError === "Missing or insufficient permissions." && (
+                  <p>Acount type/key combination is invalid. </p>
+                )}
+                {error && <p>{error}</p>}
                 {updatePending && (
-                  <button className="btnwide">isPending</button>
+                  <button className="btnwide">Pending...</button>
                 )}
               </div>
-            </form>
-            {/*picture update*/}
-            <form onSubmit={updatePictureHandleSubmit}>
-              <label>
-                <p>New Picture:</p>
-                <input type="file" onChange={handleFileChange} />
-              </label>
-              {pictureError !== null && <p>{pictureError}</p>}
-              {!updatePending && !pictureError && (
-                <button className="btn">Upload Picture</button>
-              )}
             </form>
           </div>
         </div>

@@ -19,11 +19,12 @@ export default function UserPage() {
     updateUserPicture,
     updateUserType,
   } = useUpdateUser();
-  const [flag, setFlag] = useState(-1);
   const [newUsername, setNewUsername] = useState(user.displayName);
   const [newEmail, setNewEmail] = useState(user.email);
   const [newPassword, setNewPassword] = useState(user.password);
-  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState(
+    user.password
+  );
   const [newType, setNewType] = useState("");
   const [newPic, setNewPic] = useState(null);
   const [key, setKey] = useState("");
@@ -31,9 +32,9 @@ export default function UserPage() {
   const [pic, setPic] = useState(null);
   const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
-  const [type, setType] = useState("");
+
   const [pictureError, setPictureError] = useState(null);
-  const [password, setPassword] = useState("");
+
   useEffect(() => {
     setError(null);
     try {
@@ -49,9 +50,10 @@ export default function UserPage() {
         }
         //console.log("doc: ", doc);
         setPic(doc.get("pic"));
-        setPhone(doc.get("phone"));
-        setType(doc.get("type"));
-        setPassword(doc.get("password"));
+        setNewPhone(doc.get("phone"));
+        setNewType(doc.get("type"));
+        setNewPassword(doc.get("password"));
+        setNewPasswordConfirmation(doc.get("password"));
       };
       fetchData();
       console.log("Got user data.");
@@ -75,21 +77,19 @@ export default function UserPage() {
     //try to update account newUsername
     e.preventDefault();
     if (await updateUserName(newUsername)) {
-      window.location.href = "/UserPage/" + newUsername;
+      return true;
+    } else {
+      return false;
     }
-    const userRef = projectFirestore.collection("users").doc(user.uid);
-    const doc = await userRef.get();
-    console.log("Document data:", doc.data());
   };
   const updateEmailHandleSubmit = async (e) => {
     //try to update account newEmail
     e.preventDefault();
     if (await updateUserEmail(newEmail)) {
-      window.location.href = "/UserPage/" + newUsername;
+      return true;
+    } else {
+      return false;
     }
-    const userRef = projectFirestore.collection("users").doc(user.uid);
-    const doc = await userRef.get();
-    console.log("Document data:", doc.data());
   };
   const updatePasswordHandleSubmit = async (e) => {
     //try to update account newPassword
@@ -99,34 +99,30 @@ export default function UserPage() {
       newPasswordConfirmation === newPassword &&
       (await updateUserPassword(newPassword))
     ) {
-      window.location.href = "/UserPage/" + newUsername;
-    }
-    if (newPasswordConfirmation !== newPassword) {
+      return true;
+    } else if (newPasswordConfirmation !== newPassword) {
       setError("Passwords don't match.");
+      return false;
     }
-    const userRef = projectFirestore.collection("users").doc(user.uid);
-    const doc = await userRef.get();
-    console.log("Document data:", doc.data());
+    return false;
   };
   const updatePhoneHandleSubmit = async (e) => {
     //try to update account newType
     e.preventDefault();
     if (await updatePhone(newPhone)) {
-      window.location.href = "/UserPage/" + newUsername;
+      return true;
+    } else {
+      return false;
     }
-    const userRef = projectFirestore.collection("users").doc(user.uid);
-    const doc = await userRef.get();
-    console.log("Document data:", doc.data());
   };
   const updateTypeHandleSubmit = async (e) => {
     //try to update account newType
     e.preventDefault();
     if (await updateUserType(newType, key)) {
-      window.location.href = "/UserPage/" + newUsername;
+      return true;
+    } else {
+      return false;
     }
-    const userRef = projectFirestore.collection("users").doc(user.uid);
-    const doc = await userRef.get();
-    console.log("Document data:", doc.data());
   };
   const updatePictureHandleSubmit = async (e) => {
     e.preventDefault();
@@ -138,41 +134,16 @@ export default function UserPage() {
       window.location.href = "/UserPage/" + newUsername;
     }
   };
-  const handleFileChange = (e) => {
-    setNewPic(null);
-    let selected = e.target.files[0];
-    console.log(selected);
-
-    if (!selected) {
-      setPictureError("Please select a file");
-      return;
+  const handleOnUpdate = async (e) => {
+    if (
+      (await updateNameHandleSubmit()) &&
+      (await updateEmailHandleSubmit()) &&
+      (await updatePasswordHandleSubmit()) &&
+      (await updatePhoneHandleSubmit()) &&
+      (await updateTypeHandleSubmit())
+    ) {
+      window.location.href = "/UserPage/" + newUsername;
     }
-    if (!selected.type.includes("image")) {
-      setPictureError("Selected file must be an image");
-      return;
-    }
-    if (selected.size > 500000) {
-      setPictureError("Image file size must be less than 500kb");
-      return;
-    }
-
-    setPictureError(null);
-    setNewPic(selected);
-    console.log("image updated");
-  };
-  let handleOnChange = (value) => {
-    setPhone(value);
-  };
-
-  let handleOnChangephone = (e) => {
-    setPhone(e.target.value);
-  }; /*
-  let handleOnPhoneChange = (value) => {
-    setNewPhone(value);
-  };
-*/
-  let handleOnPhoneChange = (e) => {
-    setNewPhone(e.target.value);
   };
   return (
     <>
@@ -180,317 +151,106 @@ export default function UserPage() {
       {user && (
         <div id="wrapper">
           {/*Profile Picture (First)*/}
-          {((flag === -1 || flag === 0 || flag === 5) && (
+          {
             <div id="first">
               <img className="profilePic" src={pic} alt="ProfilePicture"></img>
+            </div>
+          }
+          <div id="second">
+            {/*picture update*/}
+            <form onSubmit={updatePictureHandleSubmit}>
+              <label>
+                <p>New Picture:</p>
+                <input type="file" onChange={handleFileChange} />
+              </label>
+              {pictureError !== null && <p>{pictureError}</p>}
+              {!updatePending && !pictureError && (
+                <button className="btn">Upload Picture</button>
+              )}
+            </form>
+
+            <form onSubmit={handleOnUpdate}>
+              {/*Display Name*/}
               <div>
-                {flag === 0 && (
-                  <button className="btnPic" onClick={() => setFlag(5)}>
-                    Update
+                <label>
+                  <p>Username:</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    value={newUsername}
+                  />
+                </label>
+                {/*Email*/}
+                <label>
+                  <p>Email:</p>
+                  <input
+                    type="email"
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    value={newEmail}
+                  />
+                </label>
+                {/*Password*/}
+                <label>
+                  <p>Password:</p>
+                  <input
+                    type="password"
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    value={newPassword}
+                  />
+                  <p>Please write password again:</p>
+                  <input
+                    type="password"
+                    onChange={(e) => setNewPasswordConfirmation(e.target.value)}
+                    value={newPasswordConfirmation}
+                  />
+                </label>
+                {/*Type*/}
+                <label>
+                  <p>Type:</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setNewType(e.target.value)}
+                    value={newType}
+                  />
+                  <p>Official Key:</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setKey(e.target.value)}
+                    value={key}
+                  />
+                </label>
+                {/*Phone*/}
+                <label>
+                  <p>Set Phone:</p>
+                  <input
+                    type="tel"
+                    maxLength="12"
+                    onChange={(e) => addPhoneSpaces(e.target.value)}
+                    value={newPhone}
+                  />
+                </label>
+                {!updatePending && (
+                  <button className="btnwide">
+                    Update Account Information
                   </button>
+                )}
+                {updateError && <p>{updateError}</p>}
+                {updatePending && (
+                  <button className="btnwide">isPending</button>
                 )}
               </div>
-            </div>
-          )) || <div id="dummydiv"></div>}
-          <div id="second">
-            {(flag === 0 && (
-              <h4 className="fadein" align="center">
-                Please Select
-              </h4>
-            )) || <br></br>}
-            {{
-              /*picture update*/
-            } &&
-              flag === 5 && (
-                <>
-                  <form onSubmit={updatePictureHandleSubmit}>
-                    <label>
-                      <p>New Picture:</p>
-                      <input type="file" onChange={handleFileChange} />
-                    </label>
-                    {pictureError !== null && <p>{pictureError}</p>}
-                    {!updatePending && !pictureError && (
-                      <button className="btn">Upload Picture</button>
-                    )}
-
-                    {updateError && <p>{updateError}</p>}
-                    {updatePending && (
-                      <button className="btn">isPending</button>
-                    )}
-                  </form>
-                  <button
-                    className="btn"
-                    onClick={() => {
-                      setFlag(0);
-                      settUpdateError(null);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </>
+            </form>
+            {/*picture update*/}
+            <form onSubmit={updatePictureHandleSubmit}>
+              <label>
+                <p>New Picture:</p>
+                <input type="file" onChange={handleFileChange} />
+              </label>
+              {pictureError !== null && <p>{pictureError}</p>}
+              {!updatePending && !pictureError && (
+                <button className="btn">Upload Picture</button>
               )}
-            {/*Display Name*/}
-            {(flag === -1 || flag === 0 || flag === 1) && (
-              <h4>
-                Name: {user.displayName}
-                {/*flag === 0 && (
-                  <button className="btnUserPage" onClick={() => setFlag(1)}>
-                    Update
-                  </button>
-                )*/}
-                {flag === 1 && (
-                  <>
-                    <form onSubmit={updateNameHandleSubmit}>
-                      <label>
-                        <p>New Username:</p>
-                        <input
-                          type="text"
-                          onChange={(e) => setNewUsername(e.target.value)}
-                          value={newUsername}
-                        />
-                      </label>
-                      {!updatePending && (
-                        <button className="btn">Set Username</button>
-                      )}
-                      {updateError && <p>{updateError}</p>}
-                      {updatePending && (
-                        <button className="btn">isPending</button>
-                      )}
-                    </form>
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        setFlag(0);
-                        settUpdateError(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </h4>
-            )}
-            {/*Email*/}
-            {(flag === -1 || flag === 0 || flag === 2) && (
-              <h4>
-                Email: {user.email}
-                {/*flag === 0 && (
-                  <button className="btnUserPage" onClick={() => setFlag(2)}>
-                    Update
-                  </button>
-                )*/}
-                {flag === 2 && (
-                  <>
-                    <form onSubmit={updateEmailHandleSubmit}>
-                      <label>
-                        <p>New Email:</p>
-                        <input
-                          type="text"
-                          onChange={(e) => setNewEmail(e.target.value)}
-                          value={newEmail}
-                        />
-                      </label>
-                      {!updatePending && (
-                        <button className="btn">Set Email</button>
-                      )}
-                      {updateError && <p>{updateError}</p>}
-                      {updatePending && (
-                        <button className="btn">isPending</button>
-                      )}
-                    </form>
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        setFlag(0);
-                        settUpdateError(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </h4>
-            )}
-            {/*Password*/}
-            {(flag === -1 || flag === 0 || flag === 3) && (
-              <h4>
-                Password: {"*".repeat(password.length)}
-                {/*flag === 0 && (
-                  <button className="btnUserPage" onClick={() => setFlag(3)}>
-                    Update
-                  </button>
-                )*/}
-                {flag === 3 && (
-                  <>
-                    <form onSubmit={updatePasswordHandleSubmit}>
-                      <label>
-                        <p>New Password:</p>
-                        <input
-                          type="password"
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          value={newPassword}
-                        />
-                        <p>Please write again:</p>
-                        <input
-                          type="password"
-                          onChange={(e) =>
-                            setNewPasswordConfirmation(e.target.value)
-                          }
-                          value={newPasswordConfirmation}
-                        />
-                      </label>
-                      {!updatePending && (
-                        <button className="btn">Set Password</button>
-                      )}
-                      {error && <p>{error}</p>}
-                      {!error && updateError && <p>{updateError}</p>}
-                      {updatePending && (
-                        <button className="btn">isPending</button>
-                      )}
-                    </form>
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        setFlag(0);
-                        settUpdateError(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </h4>
-            )}
-            {/*Type*/}
-            {(flag === -1 || flag === 0 || flag === 4) && (
-              <h4>
-                Account type: {type}
-                {/*flag === 0 && (
-                  <button className="btnUserPage" onClick={() => setFlag(4)}>
-                    Update
-                  </button>
-                )*/}
-                {flag === 4 && (
-                  <>
-                    <form onSubmit={updateTypeHandleSubmit}>
-                      <label>
-                        <p>New Type:</p>
-                        <input
-                          type="text"
-                          onChange={(e) => setNewType(e.target.value)}
-                          value={newType}
-                        />
-                        <p>Official Key:</p>
-                        <input
-                          type="text"
-                          onChange={(e) => setKey(e.target.value)}
-                          value={key}
-                        />
-                      </label>
-                      {!updatePending && (
-                        <button className="btn">Set Type</button>
-                      )}
-                      {updateError && <p>{updateError}</p>}
-                      {updatePending && (
-                        <button className="btn">isPending</button>
-                      )}
-                    </form>
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        setFlag(0);
-                        settUpdateError(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </h4>
-            )}
-            {/*Phone*/}
-            {(flag === -1 || flag === 0 || flag === 6) && (
-              <h4>
-                Phone: {phone}
-                {/*flag === 0 && (
-                  <button className="btnUserPage" onClick={() => setFlag(6)}>
-                    Update
-                  </button>
-                )*/}
-                {flag === 6 && (
-                  <>
-                    <form onSubmit={updatePhoneHandleSubmit}>
-                      <label>
-                        <p>Set Phone:</p>
-                        <input
-                          type="tel"
-                          maxlength="12"
-                          onChange={(e) => addPhoneSpaces(e.target.value)}
-                          value={newPhone}
-                        />
-                      </label>
-                      {!updatePending && (
-                        <button className="btn">Set Phone</button>
-                      )}
-                      {updateError && <p>{updateError}</p>}
-                      {updatePending && (
-                        <button className="btn">isPending</button>
-                      )}
-                    </form>
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        setFlag(0);
-                        settUpdateError(null);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </h4>
-            )}
-          </div>
-          <div id="third">
-            <br></br>
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(1)}>
-                Update
-              </button>
-            )}
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(2)}>
-                Update
-              </button>
-            )}
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(3)}>
-                Update
-              </button>
-            )}
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(4)}>
-                Update
-              </button>
-            )}{" "}
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(6)}>
-                Update
-              </button>
-            )}
-          </div>
-
-          <div id="fourth">
-            {flag === -1 && (
-              <button className="btnUserPage" onClick={() => setFlag(0)}>
-                Update
-              </button>
-            )}
-            {flag === 0 && (
-              <button className="btnUserPage" onClick={() => setFlag(-1)}>
-                Cancel
-              </button>
-            )}
+            </form>
           </div>
         </div>
       )}

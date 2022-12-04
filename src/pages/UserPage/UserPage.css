@@ -86,15 +86,15 @@ input {
 }
 #first {
   position: relative;
-  display: flex;
+  display: block;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 220px;
+  height: 400px;
   margin-left: -10 auto;
   margin-right: 5px;
   border: 0px solid red;
-  background-color: rgba(66, 66, 66, 0.336);
+  background-color: rgba(122, 122, 122, 0);
 }
 #first img {
   width: 100%;
@@ -124,6 +124,7 @@ input {
   vertical-align: top;
   height: 200px;
   border: 0px solid green;
+  margin-right: auto;
   margin-left: auto;
   min-width: 277;
 }
@@ -144,4 +145,21 @@ input {
 
   text-align: right;
   border: 0px solid rgb(255, 0, 170);
+}
+
+.btnwide {
+  animation: clickit 0.9s;
+  background: none;
+  border: 2px solid #1f9751;
+  padding: 8px 6px;
+  border-radius: 4px;
+  color: #1f9751;
+  font-weight: bold;
+  font-size: 1em;
+  width: 73.1%;
+  display: inline-block;
+}
+.btnwide:hover {
+  background: #1f9751;
+  color: #fff;
 }

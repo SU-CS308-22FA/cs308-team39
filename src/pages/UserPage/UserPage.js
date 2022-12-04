@@ -202,6 +202,7 @@ export default function UserPage() {
                   <p>Set Phone:</p>
                   <input
                     type="tel"
+                    minLength="12"
                     maxLength="12"
                     onChange={(e) => addPhoneSpaces(e.target.value)}
                     value={newPhone}

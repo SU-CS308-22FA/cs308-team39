@@ -10,7 +10,6 @@ export default function UserPage() {
   const { user } = useAuthContext();
   const {
     updateError,
-    settUpdateError,
     updatePending,
     updatePhone,
     updateUserName,
@@ -30,7 +29,6 @@ export default function UserPage() {
   const [key, setKey] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [pic, setPic] = useState(null);
-  const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
 
   const [pictureError, setPictureError] = useState(null);

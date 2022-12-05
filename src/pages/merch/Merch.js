@@ -33,13 +33,13 @@ export default function Merch() {
 
     return () => unsub;
   }, [id]);
-
+  /*
   const handleClick = () => {
     projectFirestore.collection("merchandises").doc(id).update({
       title: "Title updated",
     });
   };
-
+*/
   return (
     <div className="merch">
       {error && <p className="error">{error}</p>}
@@ -56,7 +56,6 @@ export default function Merch() {
           <p>{merch.data().description}</p>
           <p>Quantity: {merch.data().rating}</p>
           <p>{merch.data().price} TL</p>
-          <button onClick={handleClick}>Update</button>
           <MerchComments merchandise={merch} />
         </>
       )}

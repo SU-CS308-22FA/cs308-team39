@@ -13,7 +13,7 @@ import Jackets from "./pages/Products/Jackets";
 import UserPage from "./pages/UserPage/UserPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Search from "./pages/Search/Search";
-
+import Addresses from "./pages/Addresses/AddressCard";
 function App() {
   const { authIsReady } = useAuthContext();
   return (
@@ -39,6 +39,9 @@ function App() {
             </Route>
             <Route path="/UserPage/:displayName">
               <UserPage />
+            </Route>
+            <Route path="/:displayName/Addresses">
+              <Addresses />
             </Route>
             <Route path="/shirts">
               <Shirts />

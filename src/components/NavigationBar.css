@@ -1,6 +1,7 @@
 .navbar {
   overflow: hidden;
   background-color: #333;
+  min-width: 885px;
 }
 
 .UpperBar {

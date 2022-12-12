@@ -13,6 +13,10 @@ export default function Addresses() {
   const [pageState, setPageState] = useState(0);
   console.log("AddressCard");
   const { user } = useAuthContext();
+
+  /**
+   * This function gets the addresses object of the user from the database.
+   */
   const getAddresses = async () => {
     const userRef = projectFirestore.collection("users").doc(user.uid);
     const doc = await userRef.get();
@@ -23,9 +27,21 @@ export default function Addresses() {
     }
     setAddresses(doc.data().addresses);
   };
+
+  /**
+   * Every time the page loads, this function gets called.
+   * The getAddresses function is inside for getting the current
+   * addresses each time.
+   */
   useEffect(() => {
     getAddresses();
   }, []);
+
+  /**
+   * This function deletes the e th address from the addresses array
+   * then updates the addresses array for the user in the database
+   * @param {number} e the index of the deleted address object
+   */
   const handleButtonDelete = async (e) => {
     //e.preventDefault();
     console.log("handle delete button");
@@ -42,6 +58,14 @@ export default function Addresses() {
     }
   };
 
+  /**
+   * This function fills the input boxes with the e th address object's values
+   * and it changes to the adding state with updating value set to e.
+   * When the updating value is different then -1, the add button will
+   * become update button and the form submit will also change to handleAddAddressForUpdate
+   * from handleAddAddress.
+   * @param {number} e
+   */
   const handleUpdateAddress = async (e) => {
     setUpdating(e);
     setPageState(1);
@@ -54,6 +78,14 @@ export default function Addresses() {
     setTitle(addressToChange.title);
     console.log(addressToChange);
   };
+
+  /**
+   * Creates a new address object from the filled inputs
+   * updates the user.addresses in the database with the new address added.
+   * If the user didnt had any addresses before it creates a new addresses array
+   * If the user already had addresses it adds the new address to it.
+   * @param {form} e used for preventing default inputs.
+   */
   const handleAddAddress = async (e) => {
     e.preventDefault();
     console.log("handle on add submit");

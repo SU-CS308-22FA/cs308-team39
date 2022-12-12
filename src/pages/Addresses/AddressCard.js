@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore } from "../../firebase/config";
-//import { useFirestore } from "../../hooks/useFirestore";
 import "./AddressCard.css";
-import { type } from "@testing-library/user-event/dist/type";
 
 export default function Addresses() {
   const [addresses, setAddresses] = useState([]);
-
+  const [updating, setUpdating] = useState(-1);
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [nameSurname, setNameSurname] = useState("");
@@ -28,54 +26,130 @@ export default function Addresses() {
   useEffect(() => {
     getAddresses();
   }, []);
+  const handleButtonDelete = async (e) => {
+    //e.preventDefault();
+    console.log("handle delete button");
+    try {
+      addresses.splice(e, 1);
+      await projectFirestore.collection("users").doc(user.uid).update({
+        addresses: addresses,
+      });
+      console.log("handle on delete end");
+      setPageState(0);
+      getAddresses();
+    } catch (err) {
+      console.log("Delete Address Error: ", err.message);
+    }
+  };
 
-  const handlesubmit = async (e) => {
+  const handleUpdateAddress = async (e) => {
+    setUpdating(e);
+    setPageState(1);
+    //e.preventDefault();
+    console.log("handle update address");
+    const addressToChange = addresses[e];
+
+    setAddress(addressToChange.content);
+    setNameSurname(addressToChange.namesurname);
+    setTitle(addressToChange.title);
+    console.log(addressToChange);
+  };
+  const handleAddAddress = async (e) => {
     e.preventDefault();
-
-    console.log("handle on submit");
+    console.log("handle on add submit");
     const addressToAdd = {
       content: address,
       namesurname: nameSurname,
       title: title,
     };
-
     try {
-      await projectFirestore
-        .collection("users")
-        .doc(user.uid)
-        .update({
-          addresses: [...addresses, addressToAdd],
-        }); /* DELETER CODE
-      addresses.splice(1, 1);
-      await projectFirestore.collection("users").doc(user.uid).update({
-        addresses: addresses,
-      });*/
-      console.log("handle on update end");
-      setPageState(0);
-      getAddresses();
+      if (!addresses) {
+        await projectFirestore
+          .collection("users")
+          .doc(user.uid)
+          .update({
+            addresses: [addressToAdd],
+          });
+        setPageState(0);
+        getAddresses();
+        setAddress("");
+        setNameSurname("");
+        setTitle("");
+      } else {
+        await projectFirestore
+          .collection("users")
+          .doc(user.uid)
+          .update({
+            addresses: [...addresses, addressToAdd],
+          });
+        setPageState(0);
+        getAddresses();
+        setAddress("");
+        setNameSurname("");
+        setTitle("");
+      }
     } catch (err) {
       console.log("Add Address Error: ", err.message);
+      setAddress("");
+      setNameSurname("");
+      setTitle("");
     }
   };
-
+  const handleAddAddressForUpdate = async (e) => {
+    e.preventDefault();
+    console.log("handleAddAddressForUpdate");
+    const addressToUpdate = {
+      content: address,
+      namesurname: nameSurname,
+      title: title,
+    };
+    addresses[updating] = addressToUpdate;
+    try {
+      await projectFirestore.collection("users").doc(user.uid).update({
+        addresses: addresses,
+      });
+    } catch (err) {
+      console.log("AddUpdate Address Error: ", err.message);
+    }
+    setAddress("");
+    setNameSurname("");
+    setTitle("");
+    setPageState(0);
+    setUpdating(-1);
+  };
   return (
     <>
       {pageState === 0 && (
         <div>
           <h1 align="center">Addresses</h1>
           <ul>
-            {addresses.map((address, i) => (
-              <div key={i} className="wrapper-address">
-                <div className="first">
-                  <h4>{address.title}</h4>
-                  <h3>{address.content}</h3>
+            {addresses &&
+              addresses.map((address, i) => (
+                <div key={i} className="wrapper-address">
+                  <div className="first">
+                    <h4>{address.title}</h4>
+                    <h3>{address.content}</h3>
+                  </div>
+                  <div className="second">
+                    <button
+                      onClick={(e) => {
+                        handleButtonDelete(i);
+                      }}
+                      className="deletebutton"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        handleUpdateAddress(i);
+                      }}
+                      className="deletebutton"
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
-                <div className="second">
-                  <button className="deletebutton">Delete</button>
-                  <button className="deletebutton">Update</button>
-                </div>
-              </div>
-            ))}
+              ))}
           </ul>
           <button
             onClick={(e) => {
@@ -87,10 +161,15 @@ export default function Addresses() {
           </button>
         </div>
       )}
+
       {pageState === 1 && (
         <div className="formwrap">
           <h4 align="center">Add Address</h4>
-          <form onSubmit={handlesubmit}>
+          <form
+            onSubmit={
+              updating > -1 ? handleAddAddressForUpdate : handleAddAddress
+            }
+          >
             <p>
               Address Title
               <input
@@ -115,7 +194,9 @@ export default function Addresses() {
                 value={nameSurname}
               ></input>
             </p>
-            <button className="btnwide">Add Address</button>
+            <button className="btnwide">
+              {updating > -1 ? "Update" : "Add Address"}
+            </button>
           </form>
         </div>
       )}

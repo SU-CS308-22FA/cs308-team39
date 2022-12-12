@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore } from "../../firebase/config";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
-import "react-phone-input-2/lib/style.css";
 import "./UserPage.css";
 
 export default function UserPage() {

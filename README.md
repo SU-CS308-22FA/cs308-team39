@@ -63,3 +63,8 @@ In order to deploy the web app, clone the main repository and run `npm install -
 To deploy on localhost use `npm start`
 
 To deploy to firebase use `npm run build` and `firebase deploy`
+
+
+## Bug Reporting:
+To report a bug simply write a well described email about the problem to eighter `rlider@sabanciunv.edu` or `bartudogan@sabanciuniv.edu` or `shah@sabanciuniv.edu`.
+Please provide screenshots about the problem for faster discovery of the problem.

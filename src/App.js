@@ -16,44 +16,11 @@ import Search from "./pages/Search/Search";
 import Addresses from "./pages/Addresses/AddressCard";
 import Category from "./pages/Products/Category";
 import Team from "./pages/Products/Team";
+import ShoppingCart from "./components/ShoppingCart";
 
 function App() {
   const { authIsReady } = useAuthContext();
-  const [cartVisibility, setCartVisibility] = useState(false);
-  const [productsInCart, setProductsInCart] = useState(products);
-  const products = [ {
-    id: 1,
-    name: "Product name",
-    rating: 4.3,
-    description: "Product description asdfa",
-    price: 200,
-    image: "https://www.w3schools.com/images/lamp.jpg" 
-  },
-  {
-    id: 1,
-    name: "Product name",
-    rating: 4.3,
-    description: "Product description asdfa",
-    price: 200,
-    image: "https://www.w3schools.com/images/lamp.jpg" 
-  },
-  {
-    id: 1,
-    name: "Product name",
-    rating: 4.3,
-    description: "Product description asdfa",
-    price: 200,
-    image: "https://www.w3schools.com/images/lamp.jpg" 
-  },
-  {
-    id: 1,
-    name: "Product name",
-    rating: 4.3,
-    description: "Product description asdfa",
-    price: 200,
-    image: "https://www.w3schools.com/images/lamp.jpg" 
-  }]
-  console.log(products)
+
   return (
     <div className="App">
       {authIsReady && (
@@ -95,6 +62,9 @@ function App() {
             </Route>
             <Route path="/search">
               <Search />
+            </Route>
+            <Route path="/cart">
+              <ShoppingCart />
             </Route>
           </Switch>
         </BrowserRouter>

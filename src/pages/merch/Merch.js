@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase/config";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import MerchComments from "./MerchComments";
+import { useFirestore } from "../../hooks/useFirestore";
+
 
 export default function Merch() {
   const { user } = useAuthContext();
   const { id } = useParams();
-
+  const { updateDocument, response } = useFirestore("carts");
   const [merch, setMerch] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -35,11 +37,36 @@ export default function Merch() {
     return () => unsub;
   }, [id]);
 
-  const addToCart = async () => {
-    const cart_Item = {merchId: merch.id, userId: user.uid}
+  
+  const addToCart = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const doc = await projectFirestore.collection("carts").doc(user.uid).get()
+      console.log(merch.id)
+      if(doc.data() == undefined || doc.data().merchIds == undefined){
+        await projectFirestore.collection("carts").doc(user.uid).set({
+          merchIds: [merch.id]
+        });
+        
+      }
+      else {
+        
+        console.log(merch.id)
+        if(!(doc.data().merchIds.includes(String(merch.id))) ) {
+          await updateDocument(doc.id, {
+            merchIds: [...doc.data().merchIds, merch.id],
+          });
+        }
+        console.log(doc.data().merchIds)
+      }
+      
+      
+      
+    } catch (error) {
+      console.log(error)
+    }
     
-    console.log(cart_Item)
-    const res = await projectFirestore.collection("cart").add(cart_Item)
   };
   /*
   const handleClick = () => {

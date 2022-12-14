@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // pages & components
@@ -16,8 +16,44 @@ import Search from "./pages/Search/Search";
 import Addresses from "./pages/Addresses/AddressCard";
 import Category from "./pages/Products/Category";
 import Team from "./pages/Products/Team";
+
 function App() {
   const { authIsReady } = useAuthContext();
+  const [cartVisibility, setCartVisibility] = useState(false);
+  const [productsInCart, setProductsInCart] = useState(products);
+  const products = [ {
+    id: 1,
+    name: "Product name",
+    rating: 4.3,
+    description: "Product description asdfa",
+    price: 200,
+    image: "https://www.w3schools.com/images/lamp.jpg" 
+  },
+  {
+    id: 1,
+    name: "Product name",
+    rating: 4.3,
+    description: "Product description asdfa",
+    price: 200,
+    image: "https://www.w3schools.com/images/lamp.jpg" 
+  },
+  {
+    id: 1,
+    name: "Product name",
+    rating: 4.3,
+    description: "Product description asdfa",
+    price: 200,
+    image: "https://www.w3schools.com/images/lamp.jpg" 
+  },
+  {
+    id: 1,
+    name: "Product name",
+    rating: 4.3,
+    description: "Product description asdfa",
+    price: 200,
+    image: "https://www.w3schools.com/images/lamp.jpg" 
+  }]
+  console.log(products)
   return (
     <div className="App">
       {authIsReady && (

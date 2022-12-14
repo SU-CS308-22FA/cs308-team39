@@ -13,6 +13,7 @@ import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Searchbar from "./Searchbar";
 import { projectFirestore } from "../firebase/config";
+import { GiShoppingBag } from "react-icons/gi";
 
 /*
 const Item = styled(Paper)(({ theme }) => ({
@@ -35,6 +36,7 @@ try {
 } */
 export default function NavBar() {
   const { user } = useAuthContext();
+  
 
   //different buttons if logged in
   const { logout } = useLogout(); //, isPending, error
@@ -129,6 +131,10 @@ export default function NavBar() {
         <Link to="/create">Add Product</Link>
         <Link to="/about">About</Link>
         <Link to="/contact">Contact Us</Link>
+        <Link to="/cart">
+          <GiShoppingBag size={24} />
+        </Link>
+        
       </div>
     </div>
   );

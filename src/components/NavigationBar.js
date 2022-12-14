@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Searchbar from "./Searchbar";
+import { projectFirestore } from "../firebase/config";
 
 /*
 const Item = styled(Paper)(({ theme }) => ({
@@ -21,11 +22,23 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 })); */
-
+/*let team
+try {
+  const { user } = useAuthContext();
+  const t_user = projectFirestore.collection("users").doc(user.uid).get()
+  const type = t_user.data().type
+  team = type != "customer"
+  console.log(team)
+  
+} catch (error) {
+  
+} */
 export default function NavBar() {
+  const { user } = useAuthContext();
+
   //different buttons if logged in
   const { logout } = useLogout(); //, isPending, error
-  const { user } = useAuthContext();
+  
   return (
     <div className="navbar">
       <div className="UpperBar">
@@ -77,12 +90,14 @@ export default function NavBar() {
             Teams <i className="fa fa-caret-down"></i>
           </button>
           <div className="subnav-content">
-            <Link to="/galatsaray">Galatsaray</Link>
-            <Link to="/trabzonspor">Trabzonspor</Link>
-            <Link to="/besiktas">Besiktas</Link>
-            <Link to="/fenerbahce">Fenerbahce</Link>
-            <Link to="/umraniyespor">Umraniyespor</Link>
-            <Link to="/konyaspor">Konyaspor</Link>
+            <Link to="/teams/galatasaray">Galatasaray</Link>
+            <Link to="/teams/trabzonspor">Trabzonspor</Link>
+            <Link to="/teams/besiktas">Besiktas</Link>
+            <Link to="/teams/fenerbahce">Fenerbahce</Link>
+            <Link to="/teams/umraniyespor">Ümraniyespor</Link>
+            <Link to="/teams/konyaspor">Konyaspor</Link>
+            <Link to="/teams/karsiyaka">Karşıyaka</Link>
+            
           </div>
         </div>
         <div className="subnav">
@@ -90,14 +105,14 @@ export default function NavBar() {
             Clothing <i className="fa fa-caret-down"></i>
           </button>
           <div className="subnav-content">
-            <Link to="/jackets">Jackets</Link>
-            <Link to="/shirts">Shirts</Link>
-            <Link to="/shorts">Shorts</Link>
-            <Link to="/pants">Pants</Link>
-            <Link to="/shoes">Shoes</Link>
-            <Link to="/socks">Socks</Link>
-            <Link to="/hats">Hat</Link>
-            <Link to="/glasses">Glasses</Link>
+            <Link to="/categories/jacket">Jackets</Link>
+            <Link to="/categories/shirt">Shirts</Link>
+            <Link to="/categories/shorts">Shorts</Link>
+            <Link to="/categories/pants">Pants</Link>
+            <Link to="/categories/shoes">Shoes</Link>
+            <Link to="/categories/socks">Socks</Link>
+            <Link to="/categories/hat">Hat</Link>
+            <Link to="/categories/glasses">Glasses</Link>
           </div>
         </div>
         <div className="subnav">
@@ -105,10 +120,10 @@ export default function NavBar() {
             Accessories <i className="fa fa-caret-down"></i>
           </button>
           <div className="subnav-content">
-            <Link to="/bag">Bags</Link>
-            <Link to="/flag">Flags</Link>
-            <Link to="/keychain">Keychains</Link>
-            <Link to="/football">Footballs</Link>
+            <Link to="/categories/bag">Bags</Link>
+            <Link to="/categories/flag">Flags</Link>
+            <Link to="/categories/keychain">Keychains</Link>
+            <Link to="/categories/football">Footballs</Link>
           </div>
         </div>
         <Link to="/create">Add Product</Link>

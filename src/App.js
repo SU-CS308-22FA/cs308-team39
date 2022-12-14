@@ -14,6 +14,8 @@ import UserPage from "./pages/UserPage/UserPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Search from "./pages/Search/Search";
 import Addresses from "./pages/Addresses/AddressCard";
+import Category from "./pages/Products/Category";
+import Team from "./pages/Products/Team";
 function App() {
   const { authIsReady } = useAuthContext();
   return (
@@ -45,6 +47,12 @@ function App() {
             </Route>
             <Route path="/shirts">
               <Shirts />
+            </Route>
+            <Route path="/categories/:category">
+              <Category />
+            </Route>
+            <Route path="/teams/:team">
+              <Team />
             </Route>
             <Route path="/jackets">
               <Jackets />

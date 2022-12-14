@@ -15,7 +15,7 @@ export default function Merch() {
   const [merch, setMerch] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
-  const [cartItem, setCartItem] = useState(null);
+
 
   useEffect(() => {
     setIsPending(true);

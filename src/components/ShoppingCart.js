@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import "./ShoppingCart.css";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { RiDeleteBin6Line } from "react-icons/ri";
+
 import { useAuthContext } from "../hooks/useAuthContext";
 import { projectFirestore } from "../firebase/config";
+import ShoppingCartItems from "./ShoppingCartItems";
 
 export default function ShoppingCart() {
+    const [pending, setPending] = useState(false)
     const [products, setProducts] = useState([])
     const { user } = useAuthContext();
     
+    console.log("1")
+
+    useEffect(() => {
+        const fnction = async () => {
+            console.log("2")
+            setPending(true)
+            const cart = await projectFirestore.collection("carts").doc(user.uid).get()
+            
+            cart.data().merchIds.forEach(async element => {
+               const a = await projectFirestore.collection("merchandises").doc(element).get()
+               products.push(a.data())
+            });
+            setPending(false)
+            console.log("3")
+            
+        };
+        
+        fnction()
+        setProducts(products)
+    }, [])
+
+    console.log("4")
     
 
 	return (
@@ -25,79 +49,7 @@ export default function ShoppingCart() {
 						/>
 					</button>
 				</div>
-				<div className="cart-products">
-					{products.length === 0 && (
-						<span className="empty-text">
-							Your basket is
-							currently empty
-						</span>
-					)}
-					{products.map((product) => (
-						<div
-							className="cart-product"
-							key={product.id}>
-							<img
-								src={
-									product.image
-								}
-								alt={product.name}
-							/>
-							<div className="product-info">
-								<h3>
-									{product.name}
-								</h3>
-								<span className="product-price">
-									{product.price *
-										product.count}
-									$
-								</span>
-							</div>
-							<select
-								className="count"
-								value={
-									product.count
-								}
-								>
-								{[
-									...Array(
-										10
-									).keys(),
-								].map(
-									(number) => {
-										const num =
-											number +
-											1;
-										return (
-											<option
-												value={
-													num
-												}
-												key={
-													num
-												}>
-												{
-													num
-												}
-											</option>
-										);
-									}
-								)}
-							</select>
-							<button
-								className="btn remove-btn"
-								>
-								<RiDeleteBin6Line
-									size={20}
-								/>
-							</button>
-						</div>
-					))}
-					{products.length > 0 && (
-						<button className="btn checkout-btn">
-							Proceed to checkout
-						</button>
-					)}
-				</div>
+				{!pending && <ShoppingCartItems products = {products}/>}
 			</div>
 		</div>
 	);

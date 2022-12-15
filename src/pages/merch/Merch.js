@@ -3,16 +3,19 @@ import "./Merch.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase/config";
-//import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import MerchComments from "./MerchComments";
+import { useFirestore } from "../../hooks/useFirestore";
+
 
 export default function Merch() {
-  //const { user } = useAuthContext();
+  const { user } = useAuthContext();
   const { id } = useParams();
-
+  const { updateDocument, response } = useFirestore("carts");
   const [merch, setMerch] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     setIsPending(true);
@@ -33,6 +36,38 @@ export default function Merch() {
 
     return () => unsub;
   }, [id]);
+
+  
+  const addToCart = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const doc = await projectFirestore.collection("carts").doc(user.uid).get()
+      console.log(merch.id)
+      if(doc.data() == undefined || doc.data().merchIds == undefined){
+        await projectFirestore.collection("carts").doc(user.uid).set({
+          merchIds: [merch.id]
+        });
+        
+      }
+      else {
+        
+        console.log(merch.id)
+        if(!(doc.data().merchIds.includes(String(merch.id))) ) {
+          await updateDocument(doc.id, {
+            merchIds: [...doc.data().merchIds, merch.id],
+          });
+        }
+        console.log(doc.data().merchIds)
+      }
+      
+      
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+  };
   /*
   const handleClick = () => {
     projectFirestore.collection("merchandises").doc(id).update({
@@ -56,6 +91,7 @@ export default function Merch() {
           <p>{merch.data().description}</p>
           <p>Quantity: {merch.data().rating}</p>
           <p>{merch.data().price} TL</p>
+          {user && (<button className="btn" onClick={addToCart}>Add To Cart</button>) }
           <MerchComments merchandise={merch} />
         </>
       )}

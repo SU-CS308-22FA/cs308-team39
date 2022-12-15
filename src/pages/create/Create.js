@@ -2,9 +2,26 @@ import "./Create.css";
 import React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import Select from "react-select"
 import { projectFirestore, projectStorage } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
+
+// for now categories stored here
+const categories = [
+  {value: 'jacket', label: 'Jacket'},
+  {value: 'shirt', label: 'Shirt'},
+  {value: 'shorts', label: 'Shorts'},
+  {value: 'pants', label: 'Pants'},
+  {value: 'shoes', label: 'Shoes'},
+  {value: 'socks', label: 'Socks'},
+  {value: 'hat', label: 'Hat'},
+  {value: 'glasses', label: 'Glasses'},
+  {value: 'bag', label: 'Bag'},
+  {value: 'flag', label: 'Flag'},
+  {value: 'keychain', label: 'Keychain'},
+  {value: 'football', label: 'Football'}
+]
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -12,12 +29,15 @@ export default function Create() {
   const [rating, setRating] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
+  const [category, setCategory] = useState("other");
+  const [team, setTeam] = useState("null");
   const [imageError, setImageError] = useState(null);
   const { updateDocument /*,response*/ } = useFirestore("merchandises");
   const history = useHistory();
   const { user } = useAuthContext();
 
   const handleFileChange = (e) => {
+    console.log(user.uid)
     setImage(null);
     let selected = e.target.files[0];
     console.log(selected);
@@ -42,9 +62,16 @@ export default function Create() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const doc = { title, description, price, rating, comments: [] };
+
+    
+    
+    const doc = { title, description, price, rating, category, comments: [], };
 
     try {
+      const t_user = projectFirestore.collection("users").doc(user.uid).get()
+      const a = (await t_user).data().type
+      setTeam(a);
+      console.log(a)
       // add the merch without the image url
       const res = await projectFirestore.collection("merchandises").add(doc);
       console.log(`new document id: ${res.id}`);
@@ -59,12 +86,16 @@ export default function Create() {
         //update the merch to have the uploaded image url
         await updateDocument(res.id, {
           imageURL: imgUrl,
+          team: a
         });
+       
       } else {
         const defaultImageUrl = `https://firebasestorage.googleapis.com/v0/b/cs308group39.appspot.com/o/images%2Fdefault%2Ftff.png?alt=media&token=ca57d197-d6e2-445b-b528-fc9aa2d34698`;
         await updateDocument(res.id, {
           imageURL: defaultImageUrl,
+          team: a
         });
+        
       }
 
       history.push("/");
@@ -119,6 +150,14 @@ export default function Create() {
           <span>Add an image of your merchandise:</span>
           <input type="file" onChange={handleFileChange} />
           {imageError && <div className="error">{imageError}</div>}
+        </label>
+        <label>
+          <span>Merchandise Category:</span>
+          <Select 
+            required
+            options={categories}
+            onChange={(option) => setCategory(option.value)}
+          />
         </label>
 
         <button className="btn">submit</button>

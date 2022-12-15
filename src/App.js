@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // pages & components
@@ -14,8 +14,14 @@ import UserPage from "./pages/UserPage/UserPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Search from "./pages/Search/Search";
 import Addresses from "./pages/Addresses/AddressCard";
+import Category from "./pages/Products/Category";
+import Team from "./pages/Products/Team";
+import ShoppingCart from "./components/ShoppingCart";
+import Orders from "./pages/Orders/Orders";
+
 function App() {
   const { authIsReady } = useAuthContext();
+
   return (
     <div className="App">
       {authIsReady && (
@@ -46,11 +52,23 @@ function App() {
             <Route path="/shirts">
               <Shirts />
             </Route>
+            <Route path="/categories/:category">
+              <Category />
+            </Route>
+            <Route path="/teams/:team">
+              <Team />
+            </Route>
             <Route path="/jackets">
               <Jackets />
             </Route>
             <Route path="/search">
               <Search />
+            </Route>
+            <Route path="/cart">
+              <ShoppingCart />
+            </Route>
+            <Route path="/:displayName/Orders">
+              <Orders />
             </Route>
           </Switch>
         </BrowserRouter>

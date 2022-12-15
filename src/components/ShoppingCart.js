@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import "./ShoppingCart.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 import firebase from "firebase";
+import { useHistory } from "react-router-dom";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import { projectFirestore } from "../firebase/config";
@@ -9,25 +10,55 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 export default function ShoppingCart() {
     const [products, setProducts] = useState([])
+    const history = useHistory();
     const { user } = useAuthContext();
-   
+    
+    const handleClick = () => {
+        history.push("/");
+    }
 
+    const checkout = async (e) => {
+        e.preventDefault();
+        
+        products.forEach(async product => {
+            const order = {
+                team: product.data().team,
+                displayName: user.displayName,
+                merchId: product.id
+            }
+            console.log(order)
+            await projectFirestore.collection("orders").add(order);
+        });
+        
+        await projectFirestore.collection("carts").doc(user.uid).delete();
+        history.push("/")
+        
+      };
+
+    const deleteProduct = async (e) => {
+        e.preventDefault();
+        
+        
+      };
+    
     useEffect(() => {
-        const fnction = async () => {
-            
-            const cart = await projectFirestore.collection("carts").doc(user.uid).get()
-            const a = await projectFirestore.collection("merchandises").where(firebase.firestore.FieldPath.documentId(), 'in', cart.data().merchIds).get()
-            console.log(a.docs[1].data().title)
-            setProducts(a.docs)
-            
-        };
         
-        fnction()
-        
-    }, [])
-
     
+        const unsub = projectFirestore
+          .collection("carts")
+          .doc(user.uid)
+          .onSnapshot(async (doc) => {
+            if(doc.exists) {
+                console.log(doc.data().merchIds)
+                const a = await projectFirestore.collection("merchandises").where(firebase.firestore.FieldPath.documentId(), 'in', doc.data().merchIds).get()
+                //console.log(a.docs[1].data().title)
+                setProducts(a.docs)
+            }
+            
+          });
     
+        return () => unsub;
+      }, []);
 
 	return (
 		<div
@@ -37,6 +68,7 @@ export default function ShoppingCart() {
 					<h2>Shopping cart</h2>
 					<button
 						className="btn close-btn"
+                        onClick={handleClick}
 						>
 						<AiFillCloseCircle
 							size={30}
@@ -110,7 +142,7 @@ export default function ShoppingCart() {
 						</div>
 					))}
 					{products.length > 0 && (
-						<button className="btn checkout-btn">
+						<button className="btn checkout-btn" onClick={checkout}>
 							Proceed to checkout
 						</button>
 					)}

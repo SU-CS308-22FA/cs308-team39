@@ -7,7 +7,8 @@ import { projectFirestore } from "../../firebase/config";
 
 export default function Orders() {
     const { user } = useAuthContext();
-    const [orders, setOrders] = useState();
+    const [orders, setOrders] = useState([{displayName: String},]);
+    let tempOrders = []
     
     useEffect(() => {
         
@@ -15,16 +16,44 @@ export default function Orders() {
         const unsub = projectFirestore
           .collection("users")
           .doc(user.uid)
-          .onSnapshot((doc) => {
+          .onSnapshot(async (doc) => {
             if (doc.exists) {
-              console.log(doc.data().type)
+
+                const a = await projectFirestore.collection("orders").where("team", "==", doc.data().type).get()
+                console.log(a)
+                console.log(a.docs[0].data())
+                /*const merchIds = []
+                a.docs.forEach(element => {
+                     merchIds.push(element.data().merchId)
+                });*/
+
+
+
+                a.docs.forEach(async element => {
+                    const merch = await projectFirestore.collection("merchandises").doc(element.data().merchId).get()
+                    const order = {displayName: element.data().displayName, ...merch.data()}
+                    console.log(order)
+                    tempOrders.push(order)
+                });
+                setOrders(tempOrders)
             } 
           });
     
         return () => unsub;
       }, []);
-
+      console.log(orders.type)
+      
     return(
-        <div>Orders For {user.displayName}</div>
+        <div>
+            <div>Orders For {user.displayName}</div>
+            {tempOrders.map((order) => (
+                <div>
+                    <p>{order.displayName}</p>
+                    <p>{order.title}</p>
+                    <p>{order.imageURL}</p>
+                </div>
+            ))}
+        </div>
+        
     )
 };

@@ -17,6 +17,7 @@ import Addresses from "./pages/Addresses/AddressCard";
 import Category from "./pages/Products/Category";
 import Team from "./pages/Products/Team";
 import ShoppingCart from "./components/ShoppingCart";
+import Orders from "./pages/Orders/Orders";
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -65,6 +66,9 @@ function App() {
             </Route>
             <Route path="/cart">
               <ShoppingCart />
+            </Route>
+            <Route path="/:displayName/Orders">
+              <Orders />
             </Route>
           </Switch>
         </BrowserRouter>

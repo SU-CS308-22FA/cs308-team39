@@ -35,9 +35,12 @@ export default function ShoppingCart() {
         
       };
 
-    const deleteProduct = async (e) => {
-        e.preventDefault();
-        
+    const deleteProduct = (id) => {
+		projectFirestore.collection("carts").doc(user.uid).update({ merchIds: firebase.firestore.FieldValue.arrayRemove(id)  })
+
+        console.log(id)
+		//const index = myArray.indexOf(2);
+		//const x = myArray.splice(index, 1);
         
       };
     
@@ -134,6 +137,7 @@ export default function ShoppingCart() {
 							</select>
 							<button
 								className="btn remove-btn"
+								onClick={() => deleteProduct(product.id)}
 								>
 								<RiDeleteBin6Line
 									size={20}

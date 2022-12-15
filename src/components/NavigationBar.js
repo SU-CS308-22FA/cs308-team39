@@ -131,9 +131,9 @@ export default function NavBar() {
         <Link to="/create">Add Product</Link>
         <Link to="/about">About</Link>
         <Link to="/contact">Contact Us</Link>
-        <Link to="/cart">
+        {user && <Link to="/cart">
           <GiShoppingBag size={24} />
-        </Link>
+        </Link> }
         
       </div>
     </div>

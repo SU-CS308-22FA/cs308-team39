@@ -51,11 +51,16 @@ export default function ShoppingCart() {
           .collection("carts")
           .doc(user.uid)
           .onSnapshot(async (doc) => {
-            if(doc.exists) {
-                console.log(doc.data().merchIds)
-                const a = await projectFirestore.collection("merchandises").where(firebase.firestore.FieldPath.documentId(), 'in', doc.data().merchIds).get()
-                //console.log(a.docs[1].data().title)
-                setProducts(a.docs)
+            if(doc) {
+                //console.log(doc.data().merchIds)
+				try {
+					const a = await projectFirestore.collection("merchandises").where(firebase.firestore.FieldPath.documentId(), 'in', doc.data().merchIds).get()
+                	//console.log(a.docs[1].data().title)
+                	setProducts(a.docs)
+				} catch (error) {
+					setProducts([])
+				}
+                
             }
             
           });

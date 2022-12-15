@@ -30,13 +30,13 @@ export default function Orders() {
 
                 const b = await projectFirestore.collection("merchandises").where(firebase.firestore.FieldPath.documentId(), 'in', merchIds).get()
                 setOrders(b.docs)
-                /*a.docs.forEach(async element => {
+                a.docs.forEach(async element => {
                     const merch = await projectFirestore.collection("merchandises").doc(element.data().merchId).get()
                     const order = {displayName: element.data().displayName, ...merch.data()}
                     console.log(order)
                     tempOrders.push(order)
                 });
-                setOrders(tempOrders)*/
+                /*setOrders(tempOrders)*/
             } 
           });
     

@@ -1,5 +1,5 @@
 import "./MerchList.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Delete from "../delete.svg";
 import { projectFirestore } from "../firebase/config";
@@ -8,6 +8,23 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 export default function MerchList({ merchs }) {
   const { user } = useAuthContext();
+  const [userType, setUserType] = useState("");
+
+  const getUserType = async () => {
+    const userRef = projectFirestore.collection("users").doc(user.uid);
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      console.log("Document data:", doc.data().type);
+    }
+    setUserType(doc.data().type);
+  };
+  useEffect(() => {
+    getUserType();
+  }, []);
+  console.log("usertype:", userType);
+
   const handleClick = (id) => {
     projectFirestore.collection("merchandises").doc(id).delete();
   };
@@ -28,9 +45,9 @@ export default function MerchList({ merchs }) {
           <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
           <Link to={`/merch/${merch.id}`}>More</Link>
-          {user && (
+          {(user && userType === merch.team) || (
             <img
-              alt="x"
+              alt="delete"
               className="delete"
               src={Delete}
               onClick={() => handleClick(merch.id)}

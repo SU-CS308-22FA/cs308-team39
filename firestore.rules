@@ -1,24 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /shirts/{document=**} {
-    	allow read: if true;
-      allow write: if request.auth.uid != null;
-    }
-    match /jackets/{document=**} {
-    	allow read: if true;
-      allow write: if request.auth.uid != null;
-    }
-    match /merchandises/{document=**} {
-      allow read: if true;
-      allow write: if request.auth.uid != null;
-    }
-    match /users/{uid}{
-    
+      match /users/{uid}{
+
     		allow read: if (request.auth.uid == uid) || (!request.resource
         	.data.hasAny(['uid','password','email',]));
         allow create: if (request.auth.uid == uid);
-        
+      
         	allow update: if (request.auth.uid == uid) &&
         	(!request.resource.data.diff(resource.data).affectedKeys()
         	.hasAny(['type']) || (resource.data.
@@ -29,9 +17,39 @@ service cloud.firestore {
           key == "besiktassecretkey" && request.
           resource.data.type == "Besiktas")|| (resource.data.
           key == "fenerbahcesecretkey" && request.
-          resource.data.type == "Fenerbahce"));
+          resource.data.type == "Fenerbahce")||(resource.data.
+          key == "konyasporsecretkey" && request.
+          resource.data.type == "Konyaspor")|| (resource.data.
+          key == "karsiyakasecretkey" && request.
+          resource.data.type == "Karsiyaka")|| (resource.data.
+          key == "trabzonsporsecretkey" && request.
+          resource.data.type == "Trabzonspor")|| (resource.data.
+          key == "umraniyesporsecretkey" && request.
+          resource.data.type == "Umraniyespor"));
           
         
-  	}   
+  	} 
+    match /shirts/{document=**} {
+    	allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+    match /jackets/{document=**} {
+    	allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+    match /merchandises/{merch=**} {
+      allow read: if true;
+      allow create: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == request.resource.data.team;
+      allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == resource.data.team;
+    }
+    match /carts/{document=**} {
+      allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+    match /orders/{document=**} {
+      allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+
 	}
 }

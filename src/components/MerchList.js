@@ -11,14 +11,18 @@ export default function MerchList({ merchs }) {
   const [userType, setUserType] = useState("");
 
   const getUserType = async () => {
-    const userRef = projectFirestore.collection("users").doc(user.uid);
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      console.log("No such document!");
-    } else {
-      console.log("Document data:", doc.data().type);
+    try {
+      const userRef = projectFirestore.collection("users").doc(user.uid);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        console.log("No such document!");
+      } else {
+        console.log("Document data:", doc.data().type);
+      }
+      setUserType(doc.data().type);
+    } catch (err) {
+      console.log("Merch List User isnull");
     }
-    setUserType(doc.data().type);
   };
   useEffect(() => {
     getUserType();

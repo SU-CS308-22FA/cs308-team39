@@ -4,7 +4,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore } from "../../firebase/config";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import "./UserPage.css";
-
+import { useLogout } from "../../hooks/useLogout";
 export default function UserPage() {
   const { user } = useAuthContext();
   const {
@@ -29,9 +29,9 @@ export default function UserPage() {
   const [newPhone, setNewPhone] = useState("");
   const [pic, setPic] = useState(null);
   const [error, setError] = useState(null);
-
+  const [deleting, setDeleting] = useState(false);
   const [pictureError, setPictureError] = useState(null);
-
+  const { logout } = useLogout();
   useEffect(() => {
     setError(null);
     try {
@@ -77,7 +77,7 @@ export default function UserPage() {
       !pictureError &&
       (await updateUserPicture(newPic, key))
     ) {
-      //window.location.href = "/UserPage/" + newUsername;
+      window.location.href = "/UserPage/" + newUsername;
     }
   };
   const handleOnUpdate = async (e) => {
@@ -97,6 +97,35 @@ export default function UserPage() {
       window.location.href = "/UserPage/" + newUsername;
     }
   };
+  const handleButtonDeleteAccount = async () => {
+    console.log("deletingAccount");
+    setDeleting(!deleting);
+  };
+  const handleDeletion = async () => {
+    console.log("deleting account perma");
+
+    projectFirestore
+      .collection("users")
+      .doc(user.uid)
+      .delete()
+      .then(() => {
+        user
+          .delete()
+          .then(() => {
+            logout();
+            // User deleted.
+            window.location.href = "/";
+          })
+          .catch((error) => {
+            // An error ocurred
+            console.log("Error on auth deletion:", error);
+          });
+      })
+      .catch((error) => {
+        console.log("Error on userdata deletion:", error);
+      });
+  };
+
   const handleFileChange = (e) => {
     setNewPic(null);
     let selected = e.target.files[0];
@@ -123,104 +152,128 @@ export default function UserPage() {
     <>
       <h1 align="center">User Information</h1>
       {user && (
-        <div id="wrapper">
-          {/*Profile Picture (First)*/}
-          {
-            <div id="first">
-              <div className="profilePic">
-                <img src={pic} alt="ProfilePicture"></img>
+        <div>
+          <div id="wrapper">
+            {/*Profile Picture (First)*/}
+            {
+              <div id="first">
+                <div className="profilePic">
+                  <img src={pic} alt="ProfilePicture"></img>
+                </div>
+                {/*picture update*/}
+                <form onSubmit={updatePictureHandleSubmit}>
+                  <label>
+                    <p>New Picture:</p>
+                    <input type="file" onChange={handleFileChange} />
+                  </label>
+                  {pictureError !== null && <p>{pictureError}</p>}
+                  {!updatePending && !pictureError && (
+                    <button className="btn">Upload Picture</button>
+                  )}
+                </form>
               </div>
-              {/*picture update*/}
-              <form onSubmit={updatePictureHandleSubmit}>
-                <label>
-                  <p>New Picture:</p>
-                  <input type="file" onChange={handleFileChange} />
-                </label>
-                {pictureError !== null && <p>{pictureError}</p>}
-                {!updatePending && !pictureError && (
-                  <button className="btn">Upload Picture</button>
-                )}
+            }
+            <div id="second">
+              <form onSubmit={handleOnUpdate}>
+                {/*Display Name*/}
+                <div>
+                  <label>
+                    <p>Username:</p>
+                    <input
+                      type="text"
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      value={newUsername}
+                    />
+                  </label>
+                  {/*Email*/}
+                  <label>
+                    <p>Email:</p>
+                    <input
+                      type="email"
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      value={newEmail}
+                    />
+                  </label>
+                  {/*Password*/}
+                  <label>
+                    <p>Password:</p>
+                    <input
+                      type="password"
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      value={newPassword}
+                    />
+                    <p>Please write password again:</p>
+                    <input
+                      type="password"
+                      onChange={(e) =>
+                        setNewPasswordConfirmation(e.target.value)
+                      }
+                      value={newPasswordConfirmation}
+                    />
+                  </label>
+                  {/*Type*/}
+                  <label>
+                    <p>Type:</p>
+                    <input
+                      type="text"
+                      onChange={(e) => setNewType(e.target.value)}
+                      value={newType}
+                    />
+                    <p>Official Key:</p>
+                    <input
+                      type="text"
+                      onChange={(e) => setKey(e.target.value)}
+                      value={key}
+                    />
+                  </label>
+                  {/*Phone*/}
+                  <label>
+                    <p>Set Phone:</p>
+                    <input
+                      type="tel"
+                      minLength="12"
+                      maxLength="12"
+                      onChange={(e) => addPhoneSpaces(e.target.value)}
+                      value={newPhone}
+                    />
+                  </label>
+                  {!updatePending && (
+                    <button className="btnwide">
+                      Update Account Information
+                    </button>
+                  )}
+                  {updateError !== "Missing or insufficient permissions." &&
+                    updateError && <p>{updateError}</p>}
+                  {updateError === "Missing or insufficient permissions." && (
+                    <p>Acount type/key combination is invalid. </p>
+                  )}
+                  {error && <p>{error}</p>}
+                  {updatePending && (
+                    <button className="btnwide">Pending...</button>
+                  )}
+                </div>
               </form>
             </div>
-          }
-          <div id="second">
-            <form onSubmit={handleOnUpdate}>
-              {/*Display Name*/}
-              <div>
-                <label>
-                  <p>Username:</p>
-                  <input
-                    type="text"
-                    onChange={(e) => setNewUsername(e.target.value)}
-                    value={newUsername}
-                  />
-                </label>
-                {/*Email*/}
-                <label>
-                  <p>Email:</p>
-                  <input
-                    type="email"
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    value={newEmail}
-                  />
-                </label>
-                {/*Password*/}
-                <label>
-                  <p>Password:</p>
-                  <input
-                    type="password"
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    value={newPassword}
-                  />
-                  <p>Please write password again:</p>
-                  <input
-                    type="password"
-                    onChange={(e) => setNewPasswordConfirmation(e.target.value)}
-                    value={newPasswordConfirmation}
-                  />
-                </label>
-                {/*Type*/}
-                <label>
-                  <p>Type:</p>
-                  <input
-                    type="text"
-                    onChange={(e) => setNewType(e.target.value)}
-                    value={newType}
-                  />
-                  <p>Official Key:</p>
-                  <input
-                    type="text"
-                    onChange={(e) => setKey(e.target.value)}
-                    value={key}
-                  />
-                </label>
-                {/*Phone*/}
-                <label>
-                  <p>Set Phone:</p>
-                  <input
-                    type="tel"
-                    minLength="12"
-                    maxLength="12"
-                    onChange={(e) => addPhoneSpaces(e.target.value)}
-                    value={newPhone}
-                  />
-                </label>
-                {!updatePending && (
-                  <button className="btnwide">
-                    Update Account Information
-                  </button>
-                )}
-                {updateError !== "Missing or insufficient permissions." &&
-                  updateError && <p>{updateError}</p>}
-                {updateError === "Missing or insufficient permissions." && (
-                  <p>Acount type/key combination is invalid. </p>
-                )}
-                {error && <p>{error}</p>}
-                {updatePending && (
-                  <button className="btnwide">Pending...</button>
-                )}
-              </div>
-            </form>
+          </div>
+          <div id="wrapper2">
+            {!deleting && (
+              <button onClick={handleButtonDeleteAccount} className="btndelete">
+                Delete Account
+              </button>
+            )}
+            {deleting && (
+              <>
+                <p align="center">
+                  You wont be able to recover your account. Are you sure?
+                </p>
+                <button onClick={handleDeletion} className="btnwide">
+                  Yes
+                </button>
+                <button onClick={handleButtonDeleteAccount} className="btnwide">
+                  No
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

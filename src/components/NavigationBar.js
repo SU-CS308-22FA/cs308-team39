@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Searchbar from "./Searchbar";
-import { projectFirestore } from "../firebase/config";
+//import { projectFirestore } from "../firebase/config";
 import { GiShoppingBag } from "react-icons/gi";
 
 /*
@@ -36,11 +36,10 @@ try {
 } */
 export default function NavBar() {
   const { user } = useAuthContext();
-  
 
   //different buttons if logged in
   const { logout } = useLogout(); //, isPending, error
-  
+
   return (
     <div className="navbar">
       <div className="UpperBar">
@@ -99,7 +98,6 @@ export default function NavBar() {
             <Link to="/teams/umraniyespor">Ümraniyespor</Link>
             <Link to="/teams/konyaspor">Konyaspor</Link>
             <Link to="/teams/karsiyaka">Karşıyaka</Link>
-            
           </div>
         </div>
         <div className="subnav">
@@ -131,10 +129,11 @@ export default function NavBar() {
         <Link to="/create">Add Product</Link>
         <Link to="/about">About</Link>
         <Link to="/contact">Contact Us</Link>
-        {user && <Link to="/cart">
-          <GiShoppingBag size={24} />
-        </Link> }
-        
+        {user && (
+          <Link to="/cart">
+            <GiShoppingBag size={24} />
+          </Link>
+        )}
       </div>
     </div>
   );

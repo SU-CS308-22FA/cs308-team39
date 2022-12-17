@@ -45,7 +45,7 @@ export default function MerchList({ merchs }) {
           <p>Quantity: {merch.rating}</p>
           <p>{merch.price} TL</p>
           <Link to={`/merch/${merch.id}`}>More</Link>
-          {(user && userType === merch.team) || (
+          {user && userType === merch.team && (
             <img
               alt="delete"
               className="delete"

@@ -38,16 +38,20 @@ export default function Checkout() {
     e.preventDefault();
     if (selectedAddress !== null) {
       products.forEach(async (productItem) => {
-        const order = {
+        var order = {
           team: productItem.team,
           displayName: user.displayName,
-          merchId: productItem.id, //undefined
+          merchId: productItem.merchId, //undefined
           quantity: productItem.quantity, //undefined
           customer: user.uid,
           address: addresses.at(selectedAddress),
+          imageURL: productItem.imageURL,
+          title: productItem.title,
+          price: productItem.price,
         };
-        console.log("checked out orders:", order);
+
         await projectFirestore.collection("orders").add(order);
+        console.log("checked out orders:", order);
       });
       await projectFirestore.collection("carts").doc(user.uid).delete();
       setPageState(1);
@@ -110,6 +114,7 @@ export default function Checkout() {
             a.forEach((doc) => {
               const b = doc.data();
               b.id = doc.id;
+              b.merchId = doc.id;
               b.quantity = 1;
               myorders.push(b);
               p = p + b.quantity * b.price;
@@ -141,7 +146,7 @@ export default function Checkout() {
         title: products.at(selectedKey).title,
         team: products.at(selectedKey).team,
         displayName: user.displayName,
-        merchId: products.at(selectedKey).id,
+        merchId: products.at(selectedKey).merchId,
         quantity: selectedOption,
         customer: user.uid,
         address: addresses.at(selectedAddress),

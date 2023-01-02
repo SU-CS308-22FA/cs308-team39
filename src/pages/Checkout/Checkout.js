@@ -228,8 +228,14 @@ export default function Checkout() {
                     </button>
                   </div>
                 ))}
-                <h4 style={{ alignSelf: "flex-end", padding: "20px" }}>
-                  Total Price:{totalPrice}
+                <h4
+                  style={{
+                    marginRight: "40px",
+                    alignSelf: "flex-end",
+                    padding: "20px",
+                  }}
+                >
+                  Total Price:{totalPrice}TL
                 </h4>
               </div>
             )}

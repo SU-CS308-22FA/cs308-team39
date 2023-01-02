@@ -27,19 +27,13 @@ service cloud.firestore {
           key == "umraniyesporsecretkey" && request.
           resource.data.type == "Umraniyespor"));
           
+          allow delete: if request.auth.uid == uid;
+          
         
   	} 
-    match /shirts/{document=**} {
-    	allow read: if true;
-      allow write: if request.auth.uid != null;
-    }
-    match /jackets/{document=**} {
-    	allow read: if true;
-      allow write: if request.auth.uid != null;
-    }
     match /merchandises/{merch=**} {
       allow read: if true;
-      allow create: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == request.resource.data.team;
+      allow create: if (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == request.resource.data.team)&&request.resource.data.team!="customer"&&request.resource.data.team!="";
       allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == resource.data.team;
     }
     match /carts/{document=**} {

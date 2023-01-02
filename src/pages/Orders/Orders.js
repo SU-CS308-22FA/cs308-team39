@@ -139,7 +139,7 @@ export default function Orders() {
                   alt={order.title}
                 />
                 <div className="product-info">
-                  <h2 style={{ fontWeight: "bold" }}>{order.merchId}</h2>
+                  <h2 style={{ fontWeight: "bold" }}>{order.title}</h2>
                   <p
                     style={{ color: "green", fontWeight: "bold" }}
                     className="product-price"
@@ -185,7 +185,7 @@ export default function Orders() {
                   alt={order.title}
                 />
                 <div className="product-info">
-                  <h2 style={{ fontWeight: "bold" }}>{order.merchId}</h2>
+                  <h2 style={{ fontWeight: "bold" }}>{order.title}</h2>
                   <p
                     style={{ color: "green", fontWeight: "bold" }}
                     className="product-price"

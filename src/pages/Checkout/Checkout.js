@@ -8,6 +8,7 @@ import "./Checkout.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore, timestamp } from "../../firebase/config";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Checkmark } from "react-checkmark";
 
 export default function Checkout() {
   const [products, setProducts] = useState([]);
@@ -53,11 +54,18 @@ export default function Checkout() {
       //history.push("/checkout");
     }
   };
-
+  const okButton = async (e) => {
+    e.preventDefault();
+    history.push("/");
+  };
+  const ordersButton = async (e) => {
+    e.preventDefault();
+    history.push("/:displayName/Orders");
+  };
   const deleteProduct = async (e, id) => {
     e.preventDefault();
     try {
-      products.pop(id);
+      products.splice(id, 1);
       const myarr = [];
       for (let i = 0; i < products.length; i++) {
         myarr.push(products.at(i).id);
@@ -255,6 +263,45 @@ export default function Checkout() {
             )}
           </div>
         </form>
+      )}
+      {pageState === 1 && (
+        <div
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+
+            textAlign: "center",
+            marginTop: 31,
+          }}
+        >
+          {" "}
+          <Checkmark size="311px" />
+          <h1 style={{ marginTop: 31 }}>Thank you for your purchase.</h1>
+          <button
+            style={{
+              width: 200,
+              margin: 20,
+              textAlign: "center",
+              marginTop: 31,
+            }}
+            className="btn"
+            onClick={(e) => okButton(e)}
+          >
+            Continue Shopping
+          </button>
+          <button
+            style={{
+              width: 200,
+              margin: 20,
+              textAlign: "center",
+              marginTop: 31,
+            }}
+            className="btn"
+            onClick={(e) => ordersButton(e)}
+          >
+            Order Details
+          </button>
+        </div>
       )}
     </div>
   );

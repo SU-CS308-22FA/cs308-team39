@@ -13,6 +13,7 @@ import { Checkmark } from "react-checkmark";
 export default function Checkout() {
   const [products, setProducts] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
   const history = useHistory();
   const { user } = useAuthContext();
   const [selectedOption, setSelectedOption] = useState(1);
@@ -20,6 +21,7 @@ export default function Checkout() {
   const [addresses, setAddresses] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [pageState, setPageState] = useState(0);
+  const [cards, setCards] = useState([]);
   /**
    * This function gets the addresses object of the user from the database.
    */
@@ -33,10 +35,20 @@ export default function Checkout() {
     }
     setAddresses(doc.data().addresses);
   };
-
+  const getCards = async () => {
+    const userRef = projectFirestore.collection("users").doc(user.uid);
+    //console.log(userRef);
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      console.log("Document data:", doc.data().cards);
+    }
+    setCards(doc.data().cards);
+  };
   const checkout = async (e) => {
     e.preventDefault();
-    if (selectedAddress !== null) {
+    if (selectedAddress !== null && selectedCard !== null) {
       products.forEach(async (productItem) => {
         var order = {
           team: productItem.team,
@@ -45,6 +57,7 @@ export default function Checkout() {
           quantity: productItem.quantity, //undefined
           customer: user.uid,
           address: addresses.at(selectedAddress),
+          card: cards.at(selectedCard),
           imageURL: productItem.imageURL,
           title: productItem.title,
           price: productItem.price,
@@ -137,7 +150,9 @@ export default function Checkout() {
         }
       });
     console.log("selected address is", selectedAddress);
+    console.log("selected card is", selectedCard);
     getAddresses();
+    getCards();
     console.log("selectedOpt.prdct:", selectedKey);
     if (selectedKey != null) {
       console.log("PRODUCTS:", products);
@@ -150,6 +165,7 @@ export default function Checkout() {
         quantity: selectedOption,
         customer: user.uid,
         address: addresses.at(selectedAddress),
+        card: cards.at(selectedCard),
         price: products.at(selectedKey).price,
       };
       console.log("update amount");
@@ -163,7 +179,7 @@ export default function Checkout() {
     }
     setTotalPrice(p);
     return () => unsub;
-  }, [selectedAddress, selectedKey, selectedOption]);
+  }, [selectedAddress, selectedCard, selectedKey, selectedOption]);
 
   return (
     <div /*className="modal"*/>
@@ -228,8 +244,14 @@ export default function Checkout() {
                     </button>
                   </div>
                 ))}
-                <h4 style={{ alignSelf: "flex-end", padding: "20px" }}>
-                  Total Price:{totalPrice}
+                <h4
+                  style={{
+                    marginRight: "40px",
+                    alignSelf: "flex-end",
+                    padding: "20px",
+                  }}
+                >
+                  Total Price: {totalPrice} TL
                 </h4>
               </div>
             )}
@@ -239,26 +261,56 @@ export default function Checkout() {
               <h2>Select Delivery Address</h2>
             </div>
             {addresses && (
-              <div className="addresses-checkout">
-                <RadioGroup onChange={(e) => setSelectedAddress(e)}>
-                  {addresses.map((address, i) => (
-                    <RadioButton
-                      key={i}
-                      rootColor="gray"
-                      pointColor="navy"
-                      id={i}
-                      name="address"
-                      value={i.toString()}
-                    >
-                      <div key={i}>
-                        <div>
-                          <h4>{address.title}</h4>
-                          <h3>{address.content}</h3>
+              <div>
+                <div className="addresses-checkout">
+                  <RadioGroup onChange={(e) => setSelectedAddress(e)}>
+                    {addresses.map((address, i) => (
+                      <RadioButton
+                        key={i}
+                        rootColor="gray"
+                        pointColor="navy"
+                        id={i}
+                        name="address"
+                        value={i.toString()}
+                      >
+                        <div key={i}>
+                          <div>
+                            <h4>{address.title}</h4>
+                            <h3>{address.content}</h3>
+                          </div>
                         </div>
-                      </div>
-                    </RadioButton>
-                  ))}
-                </RadioGroup>
+                      </RadioButton>
+                    ))}
+                  </RadioGroup>
+                </div>
+              </div>
+            )}
+            <div className="header">
+              <h2>Select Credit Card</h2>
+            </div>
+            {cards && (
+              <div>
+                <div className="addresses-checkout">
+                  <RadioGroup onChange={(e) => setSelectedCard(e)}>
+                    {cards.map((creditcard, i) => (
+                      <RadioButton
+                        key={i}
+                        rootColor="gray"
+                        pointColor="navy"
+                        id={i}
+                        name="creditcard"
+                        value={i.toString()}
+                      >
+                        <div key={i}>
+                          <div>
+                            <h4>{creditcard.name}</h4>
+                            <h3>{creditcard.number}</h3>
+                          </div>
+                        </div>
+                      </RadioButton>
+                    ))}
+                  </RadioGroup>
+                </div>
               </div>
             )}
             {products.length > 0 && (

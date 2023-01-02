@@ -14,6 +14,7 @@ import UserPage from "./pages/UserPage/UserPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Search from "./pages/Search/Search";
 import Addresses from "./pages/Addresses/AddressCard";
+import CreditCards from "./pages/CreditCards/CreditCards";
 import Category from "./pages/Products/Category";
 import Team from "./pages/Products/Team";
 import ShoppingCart from "./components/ShoppingCart";
@@ -48,6 +49,9 @@ function App() {
             </Route>
             <Route path="/UserPage/:displayName">
               <UserPage />
+            </Route>
+            <Route path="/:displayName/CreditCards">
+              <CreditCards />
             </Route>
             <Route path="/:displayName/Addresses">
               <Addresses />

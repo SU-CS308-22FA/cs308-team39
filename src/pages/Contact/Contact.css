@@ -5,13 +5,14 @@
   width: 800px;
   left: 20%;
   margin-top: 80px;
+  position: relative;
 }
 
 .TFF {
   width: 100vw;
 }
 
-h3 {
+.ContactHeader {
   margin-bottom: 40px;
   text-align: center;
   margin-top: 60px;
@@ -21,13 +22,13 @@ h3 {
   margin-right: 5%;
 }
 
-li {
+.ContactList {
   text-align: center;
   list-style: none;
   text-align: center;
 }
 
-h1 {
+.DearCustomer {
   margin-top: 50px;
   text-align: center;
   margin-bottom: 50px;

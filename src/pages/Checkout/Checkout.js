@@ -17,6 +17,7 @@ export default function Checkout() {
   const [selectedOption, setSelectedOption] = useState(1);
   const [selectedKey, setSelectedKey] = useState(null);
   const [addresses, setAddresses] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   /**
    * This function gets the addresses object of the user from the database.
    */
@@ -57,15 +58,24 @@ export default function Checkout() {
     //history.push("/checkout");
   };
 
-  const deleteProduct = (id) => {
-    projectFirestore
-      .collection("carts")
-      .doc(user.uid)
-      .update({ merchIds: firebase.firestore.FieldValue.arrayRemove(id) });
+  const deleteProduct = async (e, id) => {
+    e.preventDefault();
+    try {
+      products.pop(id);
+      const myarr = [];
+      for (let i = 0; i < products.length; i++) {
+        myarr.push(products.at(i).id);
+      }
+      console.log("PRODUCTids:", myarr);
+      await projectFirestore
+        .collection("carts")
+        .doc(user.uid)
+        .update({ merchIds: myarr });
 
-    console.log("deleted id:", id);
-    //const index = myArray.indexOf(2);
-    //const x = myArray.splice(index, 1);
+      console.log("deleted id:", id);
+    } catch (err) {
+      console.log("DELETE ERR:", err);
+    }
   };
 
   useEffect(() => {
@@ -73,9 +83,10 @@ export default function Checkout() {
       .collection("carts")
       .doc(user.uid)
       .onSnapshot(async (doc) => {
-        if (doc) {
+        if (doc && selectedKey == null) {
           //console.log(doc.data().merchIds);
           try {
+            const myorders = [];
             firebase
               .database()
               .ref("/merchandises")
@@ -90,20 +101,30 @@ export default function Checkout() {
                 doc.data().merchIds
               )
               .get();
-            const myorders = [];
+            setTotalPrice(0);
+            var p = 0;
             a.forEach((doc) => {
-              console.log("doc:", doc, "docid:", doc.id, "=>", doc.data());
               const b = doc.data();
-              b.quantity = 1;
               b.id = doc.id;
+              b.quantity = 1;
               myorders.push(b);
+              p = p + b.quantity * b.price;
+              console.log(
+                "p",
+                p,
+                "doc:",
+                doc,
+                "docid:",
+                doc.id,
+                "=>",
+                doc.data()
+              );
             });
+            setTotalPrice(p);
             setProducts(myorders);
-            //setProducts(a.docs);
           } catch (error) {
             setProducts([]);
           }
-          console.log("Products: ", products);
         }
       });
     console.log("selected address is", selectedAddress);
@@ -125,8 +146,15 @@ export default function Checkout() {
       console.log("update amount");
       products[selectedKey] = updatedOrder;
     }
+    console.log(products.length, "Products: ", products);
+    setTotalPrice(0);
+    var p = 0;
+    for (let i = 0; i < products.length; i++) {
+      p = p + products.at(i).quantity * 1 * products.at(i).price * 1;
+    }
+    setTotalPrice(p);
     return () => unsub;
-  }, [selectedAddress, selectedKey]);
+  }, [selectedAddress, selectedKey, selectedOption]);
 
   return (
     <div /*className="modal"*/>
@@ -148,6 +176,12 @@ export default function Checkout() {
                     <span className="product-price">
                       {productItem.price}
                       TL
+                      {productItem.quantity !== 1 &&
+                        " x " +
+                          productItem.quantity +
+                          ": " +
+                          productItem.price * productItem.quantity +
+                          "TL"}
                     </span>
                   </div>
                   <select
@@ -176,12 +210,17 @@ export default function Checkout() {
                   </select>
                   <button
                     className="btn remove-btn"
-                    onClick={() => deleteProduct(productItem.id)}
+                    onClick={(e) => {
+                      deleteProduct(e, i);
+                    }}
                   >
                     <RiDeleteBin6Line size={20} />
                   </button>
                 </div>
               ))}
+              <h4 style={{ alignSelf: "flex-end", padding: "20px" }}>
+                Total Price:{totalPrice}
+              </h4>
             </div>
           )}
         </div>

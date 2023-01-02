@@ -18,6 +18,7 @@ export default function Checkout() {
   const [selectedKey, setSelectedKey] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [pageState, setPageState] = useState(0);
   /**
    * This function gets the addresses object of the user from the database.
    */
@@ -34,28 +35,23 @@ export default function Checkout() {
 
   const checkout = async (e) => {
     e.preventDefault();
-
-    products.forEach(async (productItem) => {
-      const order = {
-        team: productItem.team,
-        displayName: user.displayName,
-        merchId: productItem.id, //undefined
-        quantity: productItem.quantity, //undefined
-        customer: user.uid,
-        address: addresses.at(selectedAddress),
-      };
-      console.log("checked out orders:", order);
-      /*await projectFirestore.collection("orders").add(order);
-      await projectFirestore
-        .collection("users")
-        .doc(user.uid)
-        .collection("orders")
-        .add(order);*/
-    });
-
-    /*await projectFirestore.collection("carts").doc(user.uid).delete();*/
-
-    //history.push("/checkout");
+    if (selectedAddress !== null) {
+      products.forEach(async (productItem) => {
+        const order = {
+          team: productItem.team,
+          displayName: user.displayName,
+          merchId: productItem.id, //undefined
+          quantity: productItem.quantity, //undefined
+          customer: user.uid,
+          address: addresses.at(selectedAddress),
+        };
+        console.log("checked out orders:", order);
+        await projectFirestore.collection("orders").add(order);
+      });
+      await projectFirestore.collection("carts").doc(user.uid).delete();
+      setPageState(1);
+      //history.push("/checkout");
+    }
   };
 
   const deleteProduct = async (e, id) => {
@@ -158,106 +154,108 @@ export default function Checkout() {
 
   return (
     <div /*className="modal"*/>
-      <form>
-        <div className="orders-checkout">
-          <div className="header">
-            <h2>Items</h2>
-          </div>
-          {products && (
-            <div className="cart-products">
-              {products.length === 0 && (
-                <span className="empty-text">Nothing to checkout.</span>
-              )}
-              {products.map((productItem, i) => (
-                <div key={i} className="cart-product">
-                  <img src={productItem.imageURL} alt={productItem.title} />
-                  <div className="product-info">
-                    <h3>{productItem.title}</h3>
-                    <span className="product-price">
-                      {productItem.price}
-                      TL
-                      {productItem.quantity !== 1 &&
-                        " x " +
-                          productItem.quantity +
-                          ": " +
-                          productItem.price * productItem.quantity +
-                          "TL"}
-                    </span>
-                  </div>
-                  <select
-                    name="amount"
-                    onChange={(event) => {
-                      console.log(event.target.name, event.target.value);
-                      console.log("key:", i);
-                      setSelectedKey(i);
-                      setSelectedOption(event.target.value);
-                    }}
-                    /*inputProps={{
+      {pageState === 0 && (
+        <form>
+          <div className="orders-checkout">
+            <div className="header">
+              <h2>Items</h2>
+            </div>
+            {products && (
+              <div className="cart-products">
+                {products.length === 0 && (
+                  <span className="empty-text">Nothing to checkout.</span>
+                )}
+                {products.map((productItem, i) => (
+                  <div key={i} className="cart-product">
+                    <img src={productItem.imageURL} alt={productItem.title} />
+                    <div className="product-info">
+                      <h3>{productItem.title}</h3>
+                      <span className="product-price">
+                        {productItem.price}
+                        TL
+                        {productItem.quantity !== 1 &&
+                          " x " +
+                            productItem.quantity +
+                            ": " +
+                            productItem.price * productItem.quantity +
+                            "TL"}
+                      </span>
+                    </div>
+                    <select
+                      name="amount"
+                      onChange={(event) => {
+                        console.log(event.target.name, event.target.value);
+                        console.log("key:", i);
+                        setSelectedKey(i);
+                        setSelectedOption(event.target.value);
+                      }}
+                      /*inputProps={{
                       amount: "amount",
                       product: "product",
                     }}*/
-                    className="count"
-                    value={productItem.count}
-                  >
-                    {[...Array(10).keys()].map((number) => {
-                      const num = number + 1;
-                      return (
-                        <option value={num} key={num}>
-                          {num}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <button
-                    className="btn remove-btn"
-                    onClick={(e) => {
-                      deleteProduct(e, i);
-                    }}
-                  >
-                    <RiDeleteBin6Line size={20} />
-                  </button>
-                </div>
-              ))}
-              <h4 style={{ alignSelf: "flex-end", padding: "20px" }}>
-                Total Price:{totalPrice}
-              </h4>
-            </div>
-          )}
-        </div>
-        <div className="orders-checkout">
-          <div className="header">
-            <h2>Select Delivery Address</h2>
-          </div>
-          {addresses && (
-            <div className="addresses-checkout">
-              <RadioGroup onChange={(e) => setSelectedAddress(e)}>
-                {addresses.map((address, i) => (
-                  <RadioButton
-                    key={i}
-                    rootColor="gray"
-                    pointColor="navy"
-                    id={i}
-                    name="address"
-                    value={i.toString()}
-                  >
-                    <div key={i}>
-                      <div>
-                        <h4>{address.title}</h4>
-                        <h3>{address.content}</h3>
-                      </div>
-                    </div>
-                  </RadioButton>
+                      className="count"
+                      value={productItem.count}
+                    >
+                      {[...Array(10).keys()].map((number) => {
+                        const num = number + 1;
+                        return (
+                          <option value={num} key={num}>
+                            {num}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button
+                      className="btn remove-btn"
+                      onClick={(e) => {
+                        deleteProduct(e, i);
+                      }}
+                    >
+                      <RiDeleteBin6Line size={20} />
+                    </button>
+                  </div>
                 ))}
-              </RadioGroup>
+                <h4 style={{ alignSelf: "flex-end", padding: "20px" }}>
+                  Total Price:{totalPrice}
+                </h4>
+              </div>
+            )}
+          </div>
+          <div className="orders-checkout">
+            <div className="header">
+              <h2>Select Delivery Address</h2>
             </div>
-          )}
-          {products.length > 0 && (
-            <button className="btn confirm-btn" onClick={checkout}>
-              Confirm Order
-            </button>
-          )}
-        </div>
-      </form>
+            {addresses && (
+              <div className="addresses-checkout">
+                <RadioGroup onChange={(e) => setSelectedAddress(e)}>
+                  {addresses.map((address, i) => (
+                    <RadioButton
+                      key={i}
+                      rootColor="gray"
+                      pointColor="navy"
+                      id={i}
+                      name="address"
+                      value={i.toString()}
+                    >
+                      <div key={i}>
+                        <div>
+                          <h4>{address.title}</h4>
+                          <h3>{address.content}</h3>
+                        </div>
+                      </div>
+                    </RadioButton>
+                  ))}
+                </RadioGroup>
+              </div>
+            )}
+            {products.length > 0 && (
+              <button className="btn confirm-btn" onClick={checkout}>
+                Confirm Order
+              </button>
+            )}
+          </div>
+        </form>
+      )}
     </div>
   );
 }

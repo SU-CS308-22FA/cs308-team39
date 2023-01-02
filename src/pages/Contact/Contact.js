@@ -1,10 +1,10 @@
 import React from "react";
-import "./About.css";
+import "./Contact.css";
 
-export default function About() {
+export default function Contact() {
   return (
     <div className="Body">
-      <h1>We Are The Turkish Football Federation</h1>
+      <h1>Dear Customer, You Can Contact Us Through The Following Means</h1>
       <img
         className="President"
         alt="TFF President"
@@ -19,24 +19,9 @@ export default function About() {
         same year and UEFA in 1962. It organizes the Turkey national football
         team, the Turkish Football League and the Turkish Cup
       </h3>
-      <h2>Recent Matches:</h2>
-      <div className="Matches">
-        <img
-          className="Match1"
-          alt="Latest Match Results"
-          src={process.env.PUBLIC_URL + "/Match3.jpg"}
-        ></img>
-        <img
-          className="Match2"
-          alt="Latest Match Results"
-          src={process.env.PUBLIC_URL + "/Match2.jpg"}
-        ></img>
-        <img
-          className="Match3"
-          alt="Latest Match Results"
-          src={process.env.PUBLIC_URL + "/Match1.jpg"}
-        ></img>
-      </div>
+      <a href="https://goo.gl/maps/CzBqTgjCMLassxSK7">
+        <img className="Map" src={process.env.PUBLIC_URL + "/Map.jpg"}></img>
+      </a>
     </div>
   );
 }

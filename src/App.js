@@ -19,6 +19,7 @@ import Team from "./pages/Products/Team";
 import ShoppingCart from "./components/ShoppingCart";
 import Orders from "./pages/Orders/Orders";
 import About from "./pages/About/About";
+import Contact from "./pages/Contact/Contact";
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -64,6 +65,9 @@ function App() {
             </Route>
             <Route path="/about">
               <About />
+            </Route>
+            <Route path="/contact">
+              <Contact />
             </Route>
             <Route path="/search">
               <Search />

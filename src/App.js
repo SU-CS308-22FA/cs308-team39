@@ -20,6 +20,7 @@ import ShoppingCart from "./components/ShoppingCart";
 import Orders from "./pages/Orders/Orders";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
+import Favorite from "./pages/Favorites/Favorite";
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -74,6 +75,9 @@ function App() {
             </Route>
             <Route path="/cart">
               <ShoppingCart />
+            </Route>
+            <Route path="/:displayName/Favorites">
+              <Favorite />
             </Route>
             <Route path="/:displayName/Orders">
               <Orders />

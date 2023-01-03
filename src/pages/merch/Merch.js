@@ -124,7 +124,7 @@ export default function Merch() {
             </button>
           )}
           {user && (
-            <button className="btn" onClick={addToFav}>
+            <button className="FavBtn" onClick={addToFav}>
               Favorite
             </button>
           )}

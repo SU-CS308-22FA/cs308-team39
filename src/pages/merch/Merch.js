@@ -11,6 +11,7 @@ export default function Merch() {
   const { user } = useAuthContext();
   const { id } = useParams();
   const { updateDocument /*, response */ } = useFirestore("carts");
+  const { updateFavorites /*, response */ } = useFirestore("favorites");
   const [merch, setMerch] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -64,6 +65,36 @@ export default function Merch() {
       console.log(error);
     }
   };
+
+  const addToFav = async (e) => {
+    e.preventDefault();
+
+    try {
+      const doc = await projectFirestore
+        .collection("favorites")
+        .doc(user.uid)
+        .get();
+      console.log(merch.id);
+      if (doc.data() === undefined || doc.data().merchIds === undefined) {
+        await projectFirestore
+          .collection("favorites")
+          .doc(user.uid)
+          .set({
+            merchIds: [merch.id],
+          });
+      } else {
+        console.log(merch.id);
+        if (!doc.data().merchIds.includes(String(merch.id))) {
+          await updateFavorites(doc.id, {
+            merchIds: [...doc.data().merchIds, merch.id],
+          });
+        }
+        console.log(doc.data().merchIds);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   /*
   const handleClick = () => {
     projectFirestore.collection("merchandises").doc(id).update({
@@ -90,6 +121,11 @@ export default function Merch() {
           {user && (
             <button className="btn" onClick={addToCart}>
               Add To Cart
+            </button>
+          )}
+          {user && (
+            <button className="FavBtn" onClick={addToFav}>
+              Favorite
             </button>
           )}
           <MerchComments merchandise={merch} />

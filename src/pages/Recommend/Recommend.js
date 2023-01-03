@@ -1,25 +1,18 @@
 import React from "react";
 import MerchList from "../../components/MerchList";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+
 import { projectFirestore } from "../../firebase/config";
+import styles from "./Recommend.css";
 
-// styles
-import "./Search.css";
-
-export default function Search() {
+export default function Recommend() {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-  let queryString = useLocation().search;
-
   useEffect(() => {
     setIsPending(true);
 
-    let queryParams = new URLSearchParams(queryString);
-    let query = queryParams.get("q");
-    console.log("query is " + query);
     const unsub = projectFirestore.collection("merchandises").onSnapshot(
       (snapshot) => {
         if (snapshot.empty) {
@@ -27,19 +20,13 @@ export default function Search() {
           setIsPending(false);
         } else {
           let results = [];
+          let query = "jacket";
           snapshot.docs.forEach((doc) => {
+            // console.log(doc)
             if (
               doc
                 .data()
                 .category.toLowerCase()
-                .trim()
-                .includes(query.toLowerCase().trim())
-            )
-              results.push({ ...doc.data(), id: doc.id });
-            else if (
-              doc
-                .data()
-                .title.toLowerCase()
                 .trim()
                 .includes(query.toLowerCase().trim())
             )
@@ -57,10 +44,10 @@ export default function Search() {
     );
 
     return () => unsub();
-  }, [queryString]);
+  }, []);
 
   return (
-    <div className="search">
+    <div className={styles["home"]}>
       {error && <p className="error">{error}</p>}
       {isPending && <p className="loading">{isPending}</p>}
       {data && !error && <MerchList merchs={data} />}

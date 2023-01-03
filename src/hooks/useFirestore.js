@@ -62,8 +62,25 @@ export const useFirestore = (collection) => {
     }
   };
 
-  // update a document
+  // update favorites
   const updateFavorites = async (id, updates) => {
+    dispatch({ type: "IS_PENDING" });
+
+    try {
+      const updatedDocument = await ref.doc(id).update(updates);
+      dispatchIfNotCancelled({
+        type: "UPDATED_DOCUMENT",
+        payload: updatedDocument,
+      });
+      return updatedDocument;
+    } catch (error) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: error });
+      return null;
+    }
+  };
+
+  // update recommended
+  const updateRecommended = async (id, updates) => {
     dispatch({ type: "IS_PENDING" });
 
     try {

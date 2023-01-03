@@ -3,6 +3,7 @@ import "./Favorite.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore } from "../../firebase/config";
@@ -17,26 +18,9 @@ export default function Favorite() {
     history.push("/");
   };
 
-  const checkout = async (e) => {
-    e.preventDefault();
-
-    products.forEach(async (product) => {
-      const order = {
-        team: product.data().team,
-        displayName: user.displayName,
-        merchId: product.id,
-      };
-      console.log(order);
-      await projectFirestore.collection("orders").add(order);
-    });
-
-    await projectFirestore.collection("carts").doc(user.uid).delete();
-    history.push("/");
-  };
-
   const deleteProduct = (id) => {
     projectFirestore
-      .collection("carts")
+      .collection("favorites")
       .doc(user.uid)
       .update({ merchIds: firebase.firestore.FieldValue.arrayRemove(id) });
 
@@ -76,7 +60,7 @@ export default function Favorite() {
     <div className="modal">
       <div className="shoppingCart">
         <div className="header">
-          <h2>Shopping cart</h2>
+          <h2>Favorites</h2>
           <button className="btn close-btn" onClick={handleClick}>
             <AiFillCloseCircle size={30} />
           </button>
@@ -84,7 +68,9 @@ export default function Favorite() {
         {products && (
           <div className="cart-products">
             {products.length === 0 && (
-              <span className="empty-text">Your basket is currently empty</span>
+              <span className="empty-text">
+                Your favorites are currently empty
+              </span>
             )}
             {products.map((product) => (
               <div className="cart-product">
@@ -96,29 +82,17 @@ export default function Favorite() {
                     TL
                   </span>
                 </div>
-                <select className="count" value={product.count}>
-                  {[...Array(10).keys()].map((number) => {
-                    const num = number + 1;
-                    return (
-                      <option value={num} key={num}>
-                        {num}
-                      </option>
-                    );
-                  })}
-                </select>
+                <Link className="RedirectBtn" to={`/merch/${product.id}`}>
+                  More
+                </Link>
                 <button
-                  className="btn remove-btn"
+                  className="UnFavBtn"
                   onClick={() => deleteProduct(product.id)}
                 >
                   <RiDeleteBin6Line size={20} />
                 </button>
               </div>
             ))}
-            {products.length > 0 && (
-              <button className="btn checkout-btn" onClick={checkout}>
-                Proceed to checkout
-              </button>
-            )}
           </div>
         )}
       </div>

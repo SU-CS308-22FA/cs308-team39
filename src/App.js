@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/NavigationBar";
 import Create from "./pages/create/Create";
-import Merch from "./pages/Merch/Merch";
+import Merch from "./pages/merch/Merch";
 import Shirts from "./pages/Products/Shirts";
 import Jackets from "./pages/Products/Jackets";
 import UserPage from "./pages/UserPage/UserPage";
@@ -83,6 +83,7 @@ function App() {
             </Route>
             <Route path="/:displayName/Favorites">
               <Favorite />
+            </Route>
             <Route path="/checkout">
               <Checkout />
             </Route>

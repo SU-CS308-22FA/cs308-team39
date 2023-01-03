@@ -331,7 +331,6 @@ export default function Checkout() {
             marginTop: 31,
           }}
         >
-          {" "}
           <Checkmark size="311px" />
           <h1 style={{ marginTop: 31 }}>Thank you for your purchase.</h1>
           <button

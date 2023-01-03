@@ -7,17 +7,19 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/NavigationBar";
 import Create from "./pages/create/Create";
-import Merch from "./pages/merch/Merch";
+import Merch from "./pages/Merch/Merch";
 import Shirts from "./pages/Products/Shirts";
 import Jackets from "./pages/Products/Jackets";
 import UserPage from "./pages/UserPage/UserPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Search from "./pages/Search/Search";
 import Addresses from "./pages/Addresses/AddressCard";
+import CreditCards from "./pages/CreditCards/CreditCards";
 import Category from "./pages/Products/Category";
 import Team from "./pages/Products/Team";
 import ShoppingCart from "./components/ShoppingCart";
 import Orders from "./pages/Orders/Orders";
+import Checkout from "./pages/Checkout/Checkout";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Favorite from "./pages/Favorites/Favorite";
@@ -49,6 +51,9 @@ function App() {
             <Route path="/UserPage/:displayName">
               <UserPage />
             </Route>
+            <Route path="/:displayName/CreditCards">
+              <CreditCards />
+            </Route>
             <Route path="/:displayName/Addresses">
               <Addresses />
             </Route>
@@ -78,6 +83,8 @@ function App() {
             </Route>
             <Route path="/:displayName/Favorites">
               <Favorite />
+            <Route path="/checkout">
+              <Checkout />
             </Route>
             <Route path="/:displayName/Orders">
               <Orders />

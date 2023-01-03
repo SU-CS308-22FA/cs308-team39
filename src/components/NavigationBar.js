@@ -69,6 +69,9 @@ export default function NavBar() {
                     <Link to={"/" + user.displayName + "/Addresses"}>
                       Addresses
                     </Link>
+                    <Link to={"/" + user.displayName + "/CreditCards"}>
+                      Credit Cards
+                    </Link>
                     <Link to={"/" + user.displayName + "/Orders"}>Orders</Link>
                     <Link to={"/" + user.displayName + "/Favorites"}>
                       Favorites

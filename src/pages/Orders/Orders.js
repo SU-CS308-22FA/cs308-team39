@@ -1,5 +1,6 @@
 import React from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdLocalShipping } from "react-icons/md"
 import "./Orders.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ export default function Orders() {
   const [DeliverOrders, setDeliverOrders] = useState([]);
   const [effect, setEffect] = useState(false);
 
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState("customer");
   const getUserType = async () => {
     try {
       const userRef = projectFirestore.collection("users").doc(user.uid);
@@ -135,14 +136,28 @@ export default function Orders() {
     //CUSTOMER PART ^^^^^^
 
     //DELIVER PART_______
+    
+    var where1 = "placeholder"
     projectFirestore
       .collection("users")
       .doc(user.uid)
       .onSnapshot(async (doc) => {
         if (doc.exists) {
+
+          const docType = doc.data().type
+          console.log(userType)
+          if(docType == "customer" || docType === null){
+            where1 =  "customer"
+          } else {
+            where1 = "team"
+          }
+          
+          console.log("where1 = ", where1)
+          const where2 = where1 == "customer" ? user.uid : docType
+          console.log("where 2: ", where2)
           const a = await projectFirestore
             .collection("deliver")
-            .where("team", "==", doc.data().type)
+            .where(where1, "==", where2)
             .get();
           console.log("deliver is empty", a.empty);
           if (doc) {
@@ -156,7 +171,7 @@ export default function Orders() {
                 });
               const a = await projectFirestore
                 .collection("deliver")
-                .where("team", "==", doc.data().type)
+                .where(where1, "==", where2)
                 .get();
               a.forEach((doc) => {
                 const b = doc.data();
@@ -180,7 +195,7 @@ export default function Orders() {
 
   return (
     <div>
-      {(userType !== "customer" || user.type !== "") && (
+      {(userType !== "customer" && userType !== "" && userType!==null) && (
         <div>
           <div style={{ margin: 20, marginLeft: 100 }}>
             <p style={{ fontSize: 35 }}>Orders For {user.displayName}</p>
@@ -228,7 +243,7 @@ export default function Orders() {
                       addToOnDeliver(e, i);
                     }}
                   >
-                    
+                    <MdLocalShipping/>
                   </button>
                 </div>
               </div>

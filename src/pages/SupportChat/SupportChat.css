@@ -1,0 +1,27 @@
+.support {
+    background-color: #dfe4f8;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    
+}
+.support .container {
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 70%;
+    height: 80%;
+    display: flex;
+    overflow: hidden;
+    display: flex;
+    
+  }
+.support .container .sidebar{
+    flex: 1;
+    background-color: rgb(123, 160, 180);
+}
+.support .container .chat{
+    flex: 2;
+    background-color: aliceblue;
+}

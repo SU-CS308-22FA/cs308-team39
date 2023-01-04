@@ -1,0 +1,18 @@
+.userChat {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .userChat .userChatInfo span {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .userChat .userChatInfo p {
+    font-size: 14px;
+    color: lightgray;
+  }
+  

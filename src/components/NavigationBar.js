@@ -14,6 +14,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Searchbar from "./Searchbar";
 //import { projectFirestore } from "../firebase/config";
 import { GiShoppingBag } from "react-icons/gi";
+import { FcOnlineSupport } from "react-icons/fc"
 
 /*
 const Item = styled(Paper)(({ theme }) => ({
@@ -136,9 +137,16 @@ export default function NavBar() {
         <Link to="/about">About</Link>
         <Link to="/contact">Contact Us</Link>
         {user && (
-          <Link to="/cart">
-            <GiShoppingBag size={24} />
-          </Link>
+          <div>
+            <Link to="/cart">
+              <GiShoppingBag size={24} />
+            </Link>
+            <Link to="/supportChat">
+              <FcOnlineSupport size={24} />
+            </Link>
+          </div>
+          
+          
         )}
       </div>
     </div>

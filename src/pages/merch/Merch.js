@@ -12,6 +12,7 @@ export default function Merch() {
   const { id } = useParams();
   const { updateDocument /*, response */ } = useFirestore("carts");
   const { updateFavorites /*, response */ } = useFirestore("favorites");
+  const { updateRecommended /*, response */ } = useFirestore("recommended");
   const [merch, setMerch] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -48,6 +49,36 @@ export default function Merch() {
       if (doc.data() === undefined || doc.data().merchIds === undefined) {
         await projectFirestore
           .collection("carts")
+          .doc(user.uid)
+          .set({
+            merchIds: [merch.id],
+          });
+      } else {
+        console.log(merch.id);
+        if (!doc.data().merchIds.includes(String(merch.id))) {
+          await updateDocument(doc.id, {
+            merchIds: [...doc.data().merchIds, merch.id],
+          });
+        }
+        console.log(doc.data().merchIds);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addToRecommended = async (e) => {
+    e.preventDefault();
+
+    try {
+      const doc = await projectFirestore
+        .collection("recommended")
+        .doc(user.uid)
+        .get();
+      console.log(merch.id);
+      if (doc.data() === undefined || doc.data().merchIds === undefined) {
+        await projectFirestore
+          .collection("recommended")
           .doc(user.uid)
           .set({
             merchIds: [merch.id],

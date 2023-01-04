@@ -58,7 +58,7 @@ export default function Favorite() {
 
   return (
     <div className="modal">
-      <div className="shoppingCart">
+      <div className="favoriteList">
         <div className="header">
           <h2>Favorites</h2>
           <button className="btn close-btn" onClick={handleClick}>
@@ -66,18 +66,18 @@ export default function Favorite() {
           </button>
         </div>
         {products && (
-          <div className="cart-products">
+          <div className="cart-favorites">
             {products.length === 0 && (
               <span className="empty-text">
                 Your favorites are currently empty
               </span>
             )}
             {products.map((product) => (
-              <div className="cart-product">
+              <div className="cart-favorite">
                 <img src={product.data().imageURL} alt={product.data().title} />
-                <div className="product-info">
+                <div className="favorite-info">
                   <h3>{product.data().title}</h3>
-                  <span className="product-price">
+                  <span className="favorite-price">
                     {product.data().price}
                     TL
                   </span>

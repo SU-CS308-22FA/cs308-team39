@@ -1,25 +1,23 @@
 import React from "react";
 import MerchList from "../../components/MerchList";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+
 import { projectFirestore } from "../../firebase/config";
+import styles from "./Recommend.css";
 
-// styles
-import "./Search.css";
-
-export default function Search() {
+export default function Recommend() {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-  let queryString = useLocation().search;
-
   useEffect(() => {
     setIsPending(true);
 
-    let queryParams = new URLSearchParams(queryString);
-    let query = queryParams.get("q");
-    console.log("query is " + query);
+    function randomIntFromInterval(min, max) {
+      // min and max included
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
     const unsub = projectFirestore.collection("merchandises").onSnapshot(
       (snapshot) => {
         if (snapshot.empty) {
@@ -27,22 +25,25 @@ export default function Search() {
           setIsPending(false);
         } else {
           let results = [];
+          const categories = ["shirt", "jacket", "shoes", "flag", "football"];
+          const teams = [
+            "karsiyaka",
+            "besiktas",
+            "galatsaray",
+            "fenerbahce",
+            "trabzonspor",
+            "umraniyespor",
+            "konyaspor",
+          ];
+          const rndCat = randomIntFromInterval(0, 4);
+          let query = categories[rndCat];
+          const rndTeam = randomIntFromInterval(0, 6);
+          let query2 = teams[rndTeam];
           snapshot.docs.forEach((doc) => {
-            if (
-              doc
-                .data()
-                .category.toLowerCase()
-                .trim()
-                .includes(query.toLowerCase().trim())
-            )
+            // console.log(doc)
+            if (doc.data().category.toLowerCase().trim().includes(query))
               results.push({ ...doc.data(), id: doc.id });
-            else if (
-              doc
-                .data()
-                .title.toLowerCase()
-                .trim()
-                .includes(query.toLowerCase().trim())
-            )
+            else if (doc.data().team.toLowerCase().trim().includes(query2))
               results.push({ ...doc.data(), id: doc.id });
           });
           setData(results);
@@ -57,10 +58,10 @@ export default function Search() {
     );
 
     return () => unsub();
-  }, [queryString]);
+  }, []);
 
   return (
-    <div className="search">
+    <div className={styles["home"]}>
       {error && <p className="error">{error}</p>}
       {isPending && <p className="loading">{isPending}</p>}
       {data && !error && <MerchList merchs={data} />}

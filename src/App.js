@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/NavigationBar";
 import Create from "./pages/create/Create";
-import Merch from "./pages/merch/Merch";
+import Merch from "./pages/Merch/Merch";
 import Shirts from "./pages/Products/Shirts";
 import Jackets from "./pages/Products/Jackets";
 import UserPage from "./pages/UserPage/UserPage";
@@ -23,6 +23,7 @@ import Checkout from "./pages/Checkout/Checkout";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Favorite from "./pages/Favorites/Favorite";
+import Recommend from "./pages/Recommend/Recommend";
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -89,6 +90,9 @@ function App() {
             </Route>
             <Route path="/:displayName/Orders">
               <Orders />
+            </Route>
+            <Route path="/:displayName/Recommended">
+              <Recommend />
             </Route>
           </Switch>
         </BrowserRouter>

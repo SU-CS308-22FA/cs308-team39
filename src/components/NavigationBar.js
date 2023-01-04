@@ -76,6 +76,9 @@ export default function NavBar() {
                     <Link to={"/" + user.displayName + "/Favorites"}>
                       Favorites
                     </Link>
+                    <Link to={"/" + user.displayName + "/Recommended"}>
+                      Recommended
+                    </Link>
                   </div>
                 </button>
               </div>{" "}

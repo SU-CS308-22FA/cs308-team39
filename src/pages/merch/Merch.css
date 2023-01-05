@@ -1,3 +1,4 @@
+
 .merch {
   max-width: 1200px;
   margin: 40px auto;
@@ -6,8 +7,13 @@
   padding: 40px;
   box-sizing: border-box;
 }
+
 .merch-comments h4 {
   color: var(--heading-color);
+  font-size: 2em; 
+  margin: 20px 0; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
 }
 
 .merch-comments ul {
@@ -24,11 +30,13 @@
   cursor: pointer;
   font-size: 1em;
   margin-left: 50px;
+  transition: all 0.2s;
 }
 
 .FavBtn:hover {
   background-color: #c22424;
   color: #f2f2f2;
+  transform: scale(1.1); 
 }
 
 .merch-comments li {
@@ -38,12 +46,20 @@
   margin-top: 20px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
   background: #fff;
+  transition: all 0.2s; 
 }
+
+.merch-comments li:hover {
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); 
+  transform: translateY(-2px); 
+}
+
 .comment-author {
   display: flex;
   align-items: flex-start;
   color: grey;
 }
+
 .comment-date {
   display: flex;
   align-items: flex-end;
@@ -51,15 +67,18 @@
   font-size: 0.5em;
   margin: 4px 0 10px;
 }
+
 .comment-content {
   color: black;
   font-size: 0.9em;
   display: flex;
   align-items: flex-start;
 }
+
 .add-comment label {
   margin-bottom: 0px;
 }
+
 .add-comment textarea {
   min-height: 40px;
   font-size: 1.5em;

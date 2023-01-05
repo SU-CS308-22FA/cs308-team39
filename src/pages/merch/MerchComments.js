@@ -1,4 +1,5 @@
 import React from "react";
+import "./Merch.css"
 import { useState } from "react";
 import { timestamp } from "../../firebase/config";
 import { useAuthContext } from "../../hooks/useAuthContext";

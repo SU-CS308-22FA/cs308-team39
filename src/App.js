@@ -24,6 +24,7 @@ import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Favorite from "./pages/Favorites/Favorite";
 import Recommend from "./pages/Recommend/Recommend";
+import SupportChat from "./pages/SupportChat/SupportChat";
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -81,6 +82,9 @@ function App() {
             </Route>
             <Route path="/cart">
               <ShoppingCart />
+            </Route>
+            <Route path="/supportChat">
+              <SupportChat />
             </Route>
             <Route path="/:displayName/Favorites">
               <Favorite />

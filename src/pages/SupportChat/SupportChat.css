@@ -25,3 +25,7 @@
     flex: 2;
     background-color: aliceblue;
 }
+.msgs {
+    scroll-behavior: smooth;
+    overflow: auto;
+}

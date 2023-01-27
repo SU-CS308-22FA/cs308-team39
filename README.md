@@ -28,12 +28,13 @@ After that the team will be able to add or delete products of their team.
 - Update profile info
 - Search products
 - Add/delete/change addresses
-#### In progress:
 - Shopping card
 - Order products
 - Like products
 - View team specific products
 - Filter products
+#### In progress:
+-
 
 
 ## Directory Structure:

@@ -34,7 +34,7 @@ After that the team will be able to add or delete products of their team.
 - View team specific products
 - Filter products
 #### In progress:
--
+- Yet to be decided
 
 
 ## Directory Structure:

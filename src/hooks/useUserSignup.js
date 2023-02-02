@@ -26,7 +26,7 @@ export const useSignup = () => {
       await res.user.updateProfile({ displayName: displayName });
       console.log(res.user);
 
-      projectFirestore.collection("users").doc(res.user.uid).set({
+      await projectFirestore.collection("users").doc(res.user.uid).set({
         email: email,
         password: password,
         username: displayName,
